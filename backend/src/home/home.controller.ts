@@ -6,6 +6,14 @@ import { HomeService } from './home.service';
 export class HomeController {
   constructor(private readonly homeService: HomeService) {}
 
+
+  @Get('find-all')
+  async findAllHome(){
+
+    return await this.homeService.findall();
+
+  }
+
   @Get('find-by-user')
   findByUser(@Query('userId') userId: number, @Query('page') page: number) {
     return this.homeService.findByUser(userId, page);

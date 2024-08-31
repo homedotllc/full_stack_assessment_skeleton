@@ -12,12 +12,19 @@ export class HomeService {
     private homeRepository: Repository<Home>,
   ) {}
 
+
+
+  async findall():Promise<Home[]>{
+
+    return await this.homeRepository.find();
+  }
+
   findByUser(userId: number, page: number = 1): Promise<Home[]> {
     return this.homeRepository.createQueryBuilder('home')
       .leftJoinAndSelect('home.users', 'user')
       .where('user.id = :userId', { userId })
-      .skip((page - 1) * 50)
-      .take(50)
+      .skip((page - 1) * 5)
+      .take(10)
       .getMany();
   }
 
