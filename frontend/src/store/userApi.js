@@ -16,10 +16,13 @@ export const userApi = createApi({
       query: (streetAddress) => `/user/find-by-home?street_address=${streetAddress}`,
     }),
     updateUsersForHome: builder.mutation({
-      query: ({ streetAddress, users }) => ({
+      query: ({ homeid, userIds }) => ({
         url: '/home/update-users',
-        method: 'POST',
-        body: { streetAddress, users },
+        method: 'PUT',
+        body: {
+          homeid,
+          userIds, // Updated to match the new request body format
+        },
       }),
     }),
   }),

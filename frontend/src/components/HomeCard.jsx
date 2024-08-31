@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFetchUsersByHomeQuery, useUpdateUsersForHomeMutation } from '../store/userApi';
-import EditUserModal from './EditUserModal.jsx';
-import './HomeCard.css'
+import EditUserModal from './EditUserModal';
+import './HomeCard.css';
 
 const HomeCard = ({ home }) => {
   const { data: usersByHome, isLoading, error } = useFetchUsersByHomeQuery(home.street_address);
@@ -9,16 +9,28 @@ const HomeCard = ({ home }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
 
-  // This effect will run whenever the modal is opened
+  // This effect runs when the modal is opened or usersByHome changes
   useEffect(() => {
     if (isModalOpen && usersByHome) {
-      setSelectedUsers(usersByHome.map(user => user.username)); // Set selected users to the users associated with the home
+      // Initialize selected users with IDs of users associated with the home
+      setSelectedUsers(usersByHome.map(user => user.id));
     }
   }, [isModalOpen, usersByHome]);
 
-  const handleSave = async () => {
-    await updateUsersForHome({ streetAddress: home.street_address, users: selectedUsers });
-    setIsModalOpen(false);
+  const handleSave = async () => {   
+    try {
+      await updateUsersForHome( {
+        "homeid": home.id,
+        "userIds": selectedUsers
+      }); // Note the change to userIds
+
+
+
+      setIsModalOpen(false);
+      console.log('Users updated successfully');
+    } catch (error) {
+      console.error('Error updating users:', error);
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -28,13 +40,12 @@ const HomeCard = ({ home }) => {
     <div className="home-card">
       <h3>{home.street_address}</h3>
       <p>List price: ${home.list_price}</p>
-      <p>HomeState: {home.state}</p>
+      <p>Home State: {home.state}</p>
       <p>Zip: {home.zip}</p>
-      <p>sqft: {home.sqft}</p>
-      <p>beds: {home.beds}</p>
+      <p>Sqft: {home.sqft}</p>
+      <p>Beds: {home.beds}</p>
+      <p>Baths: {home.baths}</p>
 
-      <p>baths: {home.baths}</p>
-      <p></p>
       <button onClick={() => setIsModalOpen(true)}>Edit Users</button>
       {isModalOpen && (
         <EditUserModal
@@ -42,7 +53,6 @@ const HomeCard = ({ home }) => {
           selectedUsers={selectedUsers}
           setSelectedUsers={setSelectedUsers}
           onSave={handleSave}
-
           onClose={() => setIsModalOpen(false)}
         />
       )}

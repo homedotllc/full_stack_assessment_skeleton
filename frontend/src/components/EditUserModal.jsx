@@ -7,22 +7,24 @@ const EditUserModal = ({ selectedUsers, setSelectedUsers,homeName ,onSave, onClo
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  const handleCheckboxChange = (username) => {
+  const handleCheckboxChange = (id) => {
     setSelectedUsers((prev) =>
-      prev.includes(username) ? prev.filter(user => user !== username) : [...prev, username]
+      prev.includes(id) ? prev.filter(user => user !== id) : [...prev, id]
     );
   };
 
+
+
   return (
     <div className="modal">
-      <h2>Modify Users for:{homeName}</h2>
+      <h2>Modify Users for :{homeName}</h2>
       {allUsers.map((user) => (
-        <div key={user.username}>
+        <div key={user.id}>
           <label>
             <input
               type="checkbox"
-              checked={selectedUsers.includes(user.username)}
-              onChange={() => handleCheckboxChange(user.username)}
+              checked={selectedUsers.includes(user.id)}
+              onChange={() => handleCheckboxChange(user.id)}
             />
             {user.username}
           </label>
