@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFetchUsersQuery } from '../store/userApi';
 
-const EditUserModal = ({ selectedUsers, setSelectedUsers, onSave, onClose }) => {
+const EditUserModal = ({ selectedUsers, setSelectedUsers,homeName ,onSave, onClose }) => {
   const { data: allUsers, isLoading, error } = useFetchUsersQuery();
 
   if (isLoading) return <div>Loading...</div>;
@@ -15,7 +15,7 @@ const EditUserModal = ({ selectedUsers, setSelectedUsers, onSave, onClose }) => 
 
   return (
     <div className="modal">
-      <h2>Edit Users for Home</h2>
+      <h2>Modify Users for:{homeName}</h2>
       {allUsers.map((user) => (
         <div key={user.username}>
           <label>

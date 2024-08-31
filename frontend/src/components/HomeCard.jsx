@@ -38,6 +38,7 @@ const HomeCard = ({ home }) => {
       <button onClick={() => setIsModalOpen(true)}>Edit Users</button>
       {isModalOpen && (
         <EditUserModal
+          homeName={home.street_address}
           selectedUsers={selectedUsers}
           setSelectedUsers={setSelectedUsers}
           onSave={handleSave}

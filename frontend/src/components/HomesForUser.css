@@ -4,11 +4,20 @@
     gap: 16px;
     margin: 16px 0;
   }
+
+  .nothing{
+    /* center this div */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
   
   .pagination-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
     margin-top: 16px;
   }
   
@@ -26,7 +35,16 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
-  
+  .userSelection
+  {
+
+   /* move this t right: ; */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 16px 0;
+
+  }
   .pagination-controls button:hover:not(:disabled) {
     background-color: #0056b3;
   }
