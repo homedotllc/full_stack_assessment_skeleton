@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFetchUsersByHomeQuery, useUpdateUsersForHomeMutation } from '../store/userApi';
 import EditUserModal from './EditUserModal.jsx';
+import './HomeCard.css'
 
 const HomeCard = ({ home }) => {
   const { data: usersByHome, isLoading, error } = useFetchUsersByHomeQuery(home.street_address);
@@ -26,12 +27,21 @@ const HomeCard = ({ home }) => {
   return (
     <div className="home-card">
       <h3>{home.street_address}</h3>
+      <p>List price: ${home.list_price}</p>
+      <p>HomeState: {home.state}</p>
+      <p>Zip: {home.zip}</p>
+      <p>sqft: {home.sqft}</p>
+      <p>beds: {home.beds}</p>
+
+      <p>baths: {home.baths}</p>
+      <p></p>
       <button onClick={() => setIsModalOpen(true)}>Edit Users</button>
       {isModalOpen && (
         <EditUserModal
           selectedUsers={selectedUsers}
           setSelectedUsers={setSelectedUsers}
           onSave={handleSave}
+
           onClose={() => setIsModalOpen(false)}
         />
       )}

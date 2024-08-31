@@ -1,0 +1,56 @@
+.homes-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 16px 0;
+  }
+  
+  .pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+  }
+  
+  .pagination-controls button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .pagination-controls button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination-controls button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  
+  .pagination-controls span {
+    font-size: 1rem;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 1200px) {
+    .homes-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .homes-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .homes-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  
