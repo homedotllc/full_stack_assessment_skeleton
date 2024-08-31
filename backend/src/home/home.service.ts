@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Home } from './entities/home.entity';
 import { User } from 'src/users/entities/user.entity';
-
+import { In } from 'typeorm'; // Import In from TypeORM
 
 @Injectable()
 export class HomeService {
@@ -32,7 +32,7 @@ export class HomeService {
 
     // Calculate total pages
     const totalPages = Math.ceil(totalHomes / pageSize);
-
+    console.log("fetched" );
     return {
       homes,
       currentPage: page,
@@ -40,9 +40,42 @@ export class HomeService {
     };
   }
   async updateUsers(homeId: number, userIds: number[]): Promise<void> {
-    const home = await this.homeRepository.findOne({ where: { id: homeId }, relations: ['users'] });
-    const users = await this.homeRepository.manager.getRepository(User).findByIds(userIds);
-    home.users = users;
-    await this.homeRepository.save(home);
+    try {
+      // Fetch the home entity with users relation
+      const home = await this.homeRepository.findOne({
+        where: { id: homeId },
+        relations: ['users'],
+      });
+  
+      // Check if the home entity exists
+      if (!home) {
+        throw new Error(`Home with ID ${homeId} not found`);
+      }
+  
+      // Fetch the user entities by their IDs using the In operator
+      const userRepository = this.homeRepository.manager.getRepository(User);
+      const users = await userRepository.find({
+        where: {
+          id: In(userIds),
+        },
+      });
+  
+      // Check if all users were found
+      if (users.length !== userIds.length) {
+        throw new Error('Some users not found');
+      }
+  
+      // Update the home with the new users
+      home.users = users;
+  
+      // Save the updated home entity
+      await this.homeRepository.save(home);
+  
+      console.log("Updated successfully");
+  
+    } catch (error) {
+      console.error('Error updating users:', error);
+      throw error; // Re-throw the error after logging it
+    }
   }
 }
