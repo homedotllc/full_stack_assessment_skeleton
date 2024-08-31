@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFetchUsersByHomeQuery, useUpdateUsersForHomeMutation } from '../store/userApi';
 import EditUserModal from './EditUserModal.jsx';
 
@@ -6,7 +6,14 @@ const HomeCard = ({ home }) => {
   const { data: usersByHome, isLoading, error } = useFetchUsersByHomeQuery(home.street_address);
   const [updateUsersForHome] = useUpdateUsersForHomeMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState(usersByHome?.map(user => user.username) || []);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  // This effect will run whenever the modal is opened
+  useEffect(() => {
+    if (isModalOpen && usersByHome) {
+      setSelectedUsers(usersByHome.map(user => user.username)); // Set selected users to the users associated with the home
+    }
+  }, [isModalOpen, usersByHome]);
 
   const handleSave = async () => {
     await updateUsersForHome({ streetAddress: home.street_address, users: selectedUsers });
@@ -22,7 +29,6 @@ const HomeCard = ({ home }) => {
       <button onClick={() => setIsModalOpen(true)}>Edit Users</button>
       {isModalOpen && (
         <EditUserModal
-          usersByHome={usersByHome}
           selectedUsers={selectedUsers}
           setSelectedUsers={setSelectedUsers}
           onSave={handleSave}

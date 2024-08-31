@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFetchUsersQuery } from '../store/userApi';
 
-const EditUserModal = ({ usersByHome, selectedUsers, setSelectedUsers, onSave, onClose }) => {
+const EditUserModal = ({ selectedUsers, setSelectedUsers, onSave, onClose }) => {
   const { data: allUsers, isLoading, error } = useFetchUsersQuery();
 
   if (isLoading) return <div>Loading...</div>;
@@ -12,8 +12,6 @@ const EditUserModal = ({ usersByHome, selectedUsers, setSelectedUsers, onSave, o
       prev.includes(username) ? prev.filter(user => user !== username) : [...prev, username]
     );
   };
-
-  const isSaveDisabled = selectedUsers.length === 0;
 
   return (
     <div className="modal">
@@ -30,7 +28,7 @@ const EditUserModal = ({ usersByHome, selectedUsers, setSelectedUsers, onSave, o
           </label>
         </div>
       ))}
-      <button onClick={onSave} disabled={isSaveDisabled}>Save</button>
+      <button onClick={onSave} disabled={selectedUsers.length === 0}>Save</button>
       <button onClick={onClose}>Cancel</button>
     </div>
   );
