@@ -1,5 +1,7 @@
-{
+
+  {
   "compilerOptions": {
+    "types": ["@types/validator"],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -18,4 +20,5 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   }
+
 }

@@ -1,35 +1,22 @@
-import { Controller, Get, Query, Put, Body, Patch } from '@nestjs/common';
+import { Controller, Get, Query, Put, Body, UsePipes } from '@nestjs/common';
 import { HomeService } from './home.service';
-import { get } from 'http';
-
+import { UpdateUsersDto } from './dto/update-users.dto';
+import { FindByUserDto } from './dto/find-by-user.dto';
+import { ValidationPipe } from '@nestjs/common';
 
 @Controller('home')
+@UsePipes(new ValidationPipe({ transform: true }))
 export class HomeController {
-  constructor(private readonly homeService: HomeService) { }
+  constructor(private readonly homeService: HomeService) {}
 
-
-  @Get('find-all')
-  async findAllHome() {
-
-    return await this.homeService.findall();
-
-  }
-
-  @Get('fetch-one-home')
-  async FetchOneHome(@Query('id') id: number) {
-    return await this.homeService.FetchOneHome(id);
-  }
 
   @Get('find-by-user')
-  findByUser(@Query('userId') userId: number, @Query('page') page: number) {
-    return this.homeService.findByUser(userId, page);
+  findByUser(@Query() query: FindByUserDto) {
+    return this.homeService.findByUser(query.userId, query.page);
   }
 
   @Put('update-users')
-  updateUsers(@Body('homeId') homeId: number, @Body('userIds') userIds: number[]) {
-
-
-
-    return this.homeService.updateUsers(homeId, userIds);
+  updateUsers(@Body() updateUsersDto: UpdateUsersDto) {
+    return this.homeService.updateUsers(updateUsersDto.homeId, updateUsersDto.userIds);
   }
 }

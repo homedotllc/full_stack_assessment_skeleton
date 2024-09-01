@@ -1,4 +1,4 @@
-/* Modal.css */
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -27,6 +27,7 @@
   }
   .buttons {
     display: flex;
+    justify-content: flex-end;
    
   }
   
@@ -39,7 +40,15 @@
     border-radius: 5px;
     margin: 0 10px; /* Add margin between buttons */
   }
-  
+  .button-cancel{
+    background-color: #bdc0c4;
+    color: #f0eaea;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px; /* Add margin between buttons */
+  }
   .button:disabled {
     background-color: grey;
     cursor: not-allowed;

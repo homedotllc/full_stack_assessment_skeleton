@@ -3,22 +3,31 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 
-
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
-  ) {}
+    private readonly userRepository: Repository<User>,
+  ) { }
 
-  findAll(): Promise<User[]> {
-    return this.userRepository.find();
+  async findAll(): Promise<User[]> {
+    try {
+      return await this.userRepository.find();
+    } catch (error) {
+
+      throw new Error('Failed to retrieve users');
+    }
   }
 
-  findByHome(homeId: number): Promise<User[]> {
-    return this.userRepository.createQueryBuilder('user')
-      .leftJoinAndSelect('user.homes', 'home')
-      .where('home.id = :homeId', { homeId })
-      .getMany();
+  async findByHome(homeId: number): Promise<User[]> {
+    try {
+      return await this.userRepository.find({
+        where: { homes: { id: homeId } },
+        relations: ['homes'],
+      });
+    } catch (error) {
+
+      throw new Error(`Failed to retrieve users for home ID ${homeId}`);
+    }
   }
 }

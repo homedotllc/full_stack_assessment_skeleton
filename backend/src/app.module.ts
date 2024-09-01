@@ -1,22 +1,33 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HomeModule } from './home/home.module';
 import { UsersModule } from './users/users.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '6equj5_root',
-      database: 'home_db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true, // Makes the module available globally
     }),
-    HomeModule, UsersModule],
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
+    HomeModule,
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,10 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useFetchUsersQuery, useFetchHomesByUserQuery } from '../../store/userApi.js';
 import HomeCard from '../homeCard/HomeCard.jsx';
 import Pagination from '../pagination/Pagination.jsx';
-
-import './HomesForUser.css';
 import Skeleton from '../skeleton/Skeleton.jsx';
+import './HomesForUser.css';
 
 const HomesForUser = () => {
   const { data: users, isLoading: usersLoading, error: usersError } = useFetchUsersQuery();
@@ -21,21 +20,32 @@ const HomesForUser = () => {
     }
   );
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= (homesData?.totalPages || 0)) {
-      setCurrentPage(newPage);
-    }
-  };
-
-  // Memoize users list to avoid unnecessary re-renders
+  // Memoize user options to avoid unnecessary re-renders
   const userOptions = useMemo(
-    () =>
-      users?.map(({ id, username }) => (
-        <option key={id} value={id}>
-          {username}
-        </option>
-      )),
+    () => users?.map(({ id, username }) => (
+      <option key={id} value={id}>
+        {username}
+      </option>
+    )),
     [users]
+  );
+
+  // Use useCallback to memoize the function
+  const handlePageChange = useCallback(
+    (newPage) => {
+      if (newPage >= 1 && newPage <= (homesData?.totalPages || 0)) {
+        setCurrentPage(newPage);
+      }
+    },
+    [homesData?.totalPages]
+  );
+
+  const handleUserChange = useCallback(
+    (e) => {
+      setSelectedUser(e.target.value);
+      setCurrentPage(1); // Reset to the first page when the user changes
+    },
+    []
   );
 
   if (usersLoading) return <div>Loading users...</div>;
@@ -45,7 +55,7 @@ const HomesForUser = () => {
     <div>
       <div className="userSelection">
         <p>Select user:</p>
-        <select onChange={(e) => setSelectedUser(e.target.value)} value={selectedUser}>
+        <select onChange={handleUserChange} value={selectedUser}>
           <option value="">Select a user</option>
           {userOptions}
         </select>

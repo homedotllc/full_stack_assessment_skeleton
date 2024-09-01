@@ -128,8 +128,23 @@ docker-compose -f docker-compose.initial.yml up --build -d
   - instead you directly write SQL script, that makes all the changes you want to the DB
 
 ### solution
+#### The solution involves refactoring the user_home table into three separate tables:
+- user table: To store user-specific attributes.
+- home table: To store home-specific attributes.
+- user_home_relation table: To establish a many-to-many relationship between users and homes.
 
-> explain briefly your solution for this problem here
+###### SQL Script for Normalization
+The script achieves the following:
+
+- Creates the user table to store user information.
+- Creates the home table to store home information.
+- Creates the user_home_relation table to maintain the relationship between users and homes.
+- Populates the user and home tables with distinct data from the original user_home table.
+- Populates the user_home_relation table using the IDs from the newly created user and home tables.
+- Drops the original user_home table after the data has been normalized.
+
+The 99_final_db_dump.sql file containing this script should be placed in the sql directory under the root directory of your project. This script can be executed to transform the database from its initial state to a normalized state, following best practices for relational databases.
+
 
 ## 2. React SPA
 
@@ -154,7 +169,7 @@ docker-compose -f docker-compose.initial.yml up --build -d
   - make sure that:
     - page is responsive as shown
     - we don't expect any fancy UI, barebones is just fine, but it should be functional
-  
+
 - **edit user functionality**
 
   - each home card has an `Edit User` button attached, this should show a modal on click, this is the `Edit User Modal`:
@@ -167,7 +182,7 @@ docker-compose -f docker-compose.initial.yml up --build -d
     - the users related to that home must be updated in the DB
     - the modal should close and the changes should reflect on the `homes for user page`
     - so for eg: if we had picked `user1` on `homes for user page` then clicked on `Edit User` for any home there and **unchecked** `user1` in the modal and saved, then upon closing of the modal, the home we clicked on previously, should NO longer be visible for `user1`, but should be visible for any other user for whom the checkbox was checked on `Save`
-  
+
   ![edit user modal](images/edit_user_modal.png)
 
   - make sure:
@@ -185,7 +200,7 @@ docker-compose -f docker-compose.initial.yml up --build -d
   - make sure you're handling data-fetching properly by _preferrably_ using a data-fetching-library:
     - show a loading spinner/skeleton while an API request is progress
     - gracefully handle errors if the API calls error out
-    - [<ins>**extra**</ins>] cache API responses, to improve performance 
+    - [<ins>**extra**</ins>] cache API responses, to improve performance
 
   - as discussed below it's preferred to use a data fetching library to handle these problems properly
 
@@ -220,7 +235,34 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+The application meets the requirements of displaying homes associated with users and allowing for editing user associations with homes. Below is a detailed explanation of the solution
+Tech Stack
+- JavaScript Framework: React (using Vite for fast development)
+- State Management: Redux Toolkit
+- Data Fetching: RTK Query (for optimized and structured data-fetching)
+- CSS:vanilla CSS (for simple and responsive design)
+
+##### Solution Breakdown
+1. Homes for User Page:
+  - The page features a dropdown at the top for selecting a user. When a user is selected, the associated homes are displayed in cards below the dropdown.
+  - The page is fully responsive, ensuring a functional UI on various devices.
+2. Edit User Functionality:
+  - Each home card includes an "Edit User" button that triggers a modal on click. This modal allows editing the users associated with the selected home.
+  - The modal displays checkboxes for each user, with the currently associated users pre-checked.
+  - Users can toggle these checkboxes to update the associations. If the user clicks "Cancel," the modal closes without making any changes.
+  - If the user clicks "Save," the associations are updated in the database, the modal closes, and the changes are reflected immediately on the "Homes for User" page.
+3. Edit User Modal:
+  - The modal's UI is designed to be bug-free and user-friendly.
+  - Checkboxes are controlled components, ensuring they reflect the current state accurately.
+  - The solution includes a validation mechanism that ensures at least one user is selected. If no users are selected,, and the "Save" button is disabled.
+4. Data Fetching:
+  - Data fetching is handled using RTK Query, which simplifies API interaction and ensures efficient data management.
+  - A loading spinner is displayed while data is being fetched.
+  - Errors are handled gracefully, with appropriate messaging displayed to the user if an API call fails.
+  - API responses are cached to improve performance and reduce unnecessary network requests.
+5. State Management:
+    - Redux Toolkit is used throughout the application for managing global state. Even though the application could potentially be managed without Redux, it was included to demonstrate state management capabilities.
+
 
 ## 3. Backend API development on Node
 
@@ -253,7 +295,7 @@ docker-compose -f docker-compose.initial.yml up --build -d
     - should only use JSON as the interface
     - if possible, sanitize the data sent in the request
     - the `/home/update-users` API is idempotent
-  
+
 - **[<ins>extra</ins>] add pagination**
 
   - for `/home/find-by-user` API add pagination support:
@@ -280,8 +322,42 @@ docker-compose -f docker-compose.initial.yml up --build -d
     - we do NOT want raw SQL, if none of above works, you can use any ORM you know, but please mention and link to it in the README
 
 ### solution
+The APIs are designed to handle the key operations required by the frontend, such as fetching users and homes, and updating user associations with homes. The backend is built using NestJS, a powerful framework for building scalable server-side applications with TypeScript, and TypeORM for database interaction.
 
-> explain briefly your solution for this problem here
+#### Tech Stacks
+- Backend Framework: NestJS (for structured and scalable development)
+- ORM: TypeORM (for database interaction and easy data manipulation)
+- Database: MySQL (interfacing with the database where the user and home data is stored)
+- Data Format: JSON (used for all API interactions)
+
+#### API Endpoints
+
+1. /user/find-all:
+   - Method: GET
+   - Functionality: This API returns all users stored in the database.
+2. /home/find-by-user:
+   - Method: GET
+   - Functionality: This API returns all homes associated with a particular user, identified by their userId.
+   - Pagination: Added support for pagination with a page size of 50, which can be adjusted via query parameters.
+3. /user/find-by-home:
+   - Method: GET
+   - Functionality: This API returns all users associated with a specific home, identified by homeId.
+4. /home/update-users:
+   - Method: POST
+   - Functionality: This API updates the users associated with a particular home. It takes in a home ID and a new set of users, and updates the database to reflect these changes.
+   - Idempotency: The API is idempotent, ensuring that multiple identical requests result in the same outcome without causing unintended side effects.
+   - Request Body: The JSON body includes homeId and an array of userIds to be associated with the home.
+   - Data Sanitization: The input data is sanitized to prevent SQL injection and other common vulnerabilities.
+
+#### Additional Considerations
+- Error Handling: Proper error handling is implemented to ensure meaningful error messages are returned in case of invalid requests or server issues.
+- Data Validation: DTOs (Data Transfer Objects) are used to validate the structure and types of incoming data.
+- Pagination UI: A basic pagination UI is added to the "Homes for User" page on the frontend, leveraging the paginated data provided by the /home/find-by-user API.
+
+
+
+
+
 
 ## Submission Guidelines
 
@@ -331,4 +407,4 @@ docker-compose -f docker-compose.initial.yml down
 ### submit the fork url
 
 - when you've committed everything needed to your github fork, please share the url with us, so we can review your submission
-  
+

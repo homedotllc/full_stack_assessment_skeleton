@@ -34,11 +34,12 @@ const EditUserModal = ({ selectedUsers, setSelectedUsers, homeName, onSave, onCl
           ))}
         </div>
         <div className="buttons">
+          
+          <button className="button-cancel" onClick={onClose}>
+            Cancel
+          </button>
           <button className="button" onClick={onSave} disabled={selectedUsers.length === 0}>
             Save
-          </button>
-          <button className="button" onClick={onClose}>
-            Cancel
           </button>
         </div>
       </div>
