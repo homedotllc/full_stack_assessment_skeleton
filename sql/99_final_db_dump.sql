@@ -14,9 +14,10 @@ CREATE TABLE `user_home` (
   `baths` int DEFAULT NULL,
   `list_price` float DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
-LOCK TABLES `user_home` WRITE;
+-- LOCK TABLES `user_home` WRITE;
 INSERT INTO `user_home`
-VALUES (
+VALUES 
+  (
     'user7',
     'user7@example.org',
     '72242 Jacobson Square',
@@ -54840,3 +54841,38 @@ VALUES (
     3,
     603939
   );
+
+UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS `user` (
+    `email` VARCHAR(100) NOT NULL,
+    `username` VARCHAR(100) DEFAULT NULL,
+    PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+LOCK TABLES `user` WRITE, `user_home` WRITE;
+INSERT INTO `user` (`username`, `email`)
+SELECT DISTINCT `username`, `email` FROM `user_home`;
+UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS `home` (
+	`id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `street_address` VARCHAR(255) NOT NULL,
+    `state` VARCHAR(50) DEFAULT NULL,
+    `zip` VARCHAR(10) DEFAULT NULL,
+    `sqft` FLOAT DEFAULT NULL,
+    `beds` INT DEFAULT NULL,
+    `baths` INT DEFAULT NULL,
+    `list_price` FLOAT DEFAULT NULL,
+    `user_email` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_email`) REFERENCES `user`(`email`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    INDEX `index_user_email` (`user_email`) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+LOCK TABLES `home` WRITE, `user_home` WRITE;
+INSERT INTO `home` (`street_address`, `state`, `zip`, `sqft`, `beds`, `baths`, `list_price`, `user_email`)
+SELECT `street_address`, `state`, `zip`, `sqft`, `beds`, `baths`, `list_price`, `email` FROM `user_home`;
+UNLOCK TABLES;
