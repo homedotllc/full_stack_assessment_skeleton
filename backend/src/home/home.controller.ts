@@ -29,6 +29,7 @@ export class HomeController {
   updateUsers(@Body('homeId') homeId: number, @Body('userIds') userIds: number[]) {
 
 
+
     return this.homeService.updateUsers(homeId, userIds);
   }
 }

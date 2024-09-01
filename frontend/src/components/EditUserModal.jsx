@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFetchUsersQuery } from '../store/userApi';
-
-const EditUserModal = ({ selectedUsers, setSelectedUsers,homeName ,onSave, onClose }) => {
+import './EditUserModal.css';
+const EditUserModal = ({ selectedUsers, setSelectedUsers,homeName ,onSave, onClose,children }) => {
   const { data: allUsers, isLoading, error } = useFetchUsersQuery();
 
 
@@ -20,7 +20,8 @@ const EditUserModal = ({ selectedUsers, setSelectedUsers,homeName ,onSave, onClo
 
 
   return (
-    <div className="modal">
+    <div className="modal-overlay">
+      <div className="modal-content">
       <h2>Modify Users for :{homeName}</h2>
       {allUsers.map((user) => (
         <div key={user.id}>
@@ -30,12 +31,16 @@ const EditUserModal = ({ selectedUsers, setSelectedUsers,homeName ,onSave, onClo
               checked={selectedUsers.includes(user.id)}
               onChange={() => handleCheckboxChange(user.id)}
             />
+          
             {user.username}
           </label>
         </div>
       ))}
-      <button onClick={onSave} disabled={selectedUsers.length === 0}>Save</button>
-      <button onClick={onClose}>Cancel</button>
+      <div className="buttons">
+      <button className='button' onClick={onSave} disabled={selectedUsers.length === 0}>Save</button>
+      <button className='button' onClick={onClose}>Cancel</button>
+      </div>
+    </div>
     </div>
   );
 };
