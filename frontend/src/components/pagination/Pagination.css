@@ -1,0 +1,16 @@
+/* src/components/pagination/Pagination.css */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-controls button {
+    margin: 0 10px;
+  }
+  
+  .pagination-controls span {
+    margin: 0 10px;
+  }
+  

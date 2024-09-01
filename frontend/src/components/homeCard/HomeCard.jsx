@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useUpdateUsersForHomeMutation, useFetchUsersByHomeQuery } from '../store/userApi';
-import EditUserModal from './EditUserModal';
+import { useUpdateUsersForHomeMutation, useFetchUsersByHomeQuery } from '../../store/userApi';
+
+import EditUserModal from '../modal/EditUserModal';
 import './HomeCard.css';
 
 const HomeCard = ({ home }) => {

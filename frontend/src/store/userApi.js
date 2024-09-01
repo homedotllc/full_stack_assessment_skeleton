@@ -8,27 +8,44 @@ export const userApi = createApi({
   endpoints: (builder) => ({
     fetchUsers: builder.query({
       query: () => '/user/find-all',
+     
+      keepUnusedDataFor: 60, // Cache data for 60 seconds before considering it "unused"
     }),
     fetchHomesByUser: builder.query({
       query: ({ userId, page }) => `/home/find-by-user?userId=${userId}&page=${page}`,
+      
+      keepUnusedDataFor: 60, 
     }),
-
     fetchUsersByHome: builder.query({
-      query: (homeid) => `/user/find-by-home?homeId=${homeid}`,
+      query: (homeId) => `/user/find-by-home?homeId=${homeId}`,
+     
+      keepUnusedDataFor: 60, 
     }),
-
-
     updateUsersForHome: builder.mutation({
       query: ({ homeId, userIds }) => ({
         url: '/home/update-users',
         method: 'PUT',
         body: {
           homeId,
-          userIds, // Updated to match the new request body format
+          userIds,
         },
       }),
+      // Optionally invalidate cache after mutation
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        
+          dispatch(userApi.util.invalidateTags([{ type: 'Homes', id: arg.homeId }]));
+        } catch (error) {
+          // Handle error if needed
+
+          console.error('Error updating users:', error);
+        }
+      },
     }),
   }),
+  
+  tagTypes: ['Users', 'Homes'],
 });
 
 export const {
@@ -36,5 +53,4 @@ export const {
   useFetchHomesByUserQuery,
   useFetchUsersByHomeQuery,
   useUpdateUsersForHomeMutation,
-  
 } = userApi;

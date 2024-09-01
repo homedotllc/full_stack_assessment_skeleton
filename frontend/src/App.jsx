@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
-import HomesForUser from './components/HomesForUser';
+import HomesForUser from './components/home/HomesForUser';
 
 function App() {
   return (
