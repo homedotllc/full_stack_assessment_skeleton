@@ -1,40 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { useFetchUsersByHomeQuery, useUpdateUsersForHomeMutation } from '../store/userApi';
+import { useUpdateUsersForHomeMutation, useFetchUsersByHomeQuery } from '../store/userApi';
 import EditUserModal from './EditUserModal';
 import './HomeCard.css';
 
 const HomeCard = ({ home }) => {
-  const { data: usersByHome, isLoading, error } = useFetchUsersByHomeQuery(home.street_address);
+  const { data: usersByHome, isLoading, error } = useFetchUsersByHomeQuery(home.id);
+
+
+
+
   const [updateUsersForHome] = useUpdateUsersForHomeMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
+
+
 
   // This effect runs when the modal is opened or usersByHome changes
   useEffect(() => {
     if (isModalOpen && usersByHome) {
       // Initialize selected users with IDs of users associated with the home
       setSelectedUsers(usersByHome.map(user => user.id));
+
+
+
+
+
+
     }
   }, [isModalOpen, usersByHome]);
 
-  const handleSave = async () => {   
+  const handleSave = async () => {
     try {
-      await updateUsersForHome( {
-        "homeid": home.id,
+      await updateUsersForHome({
+        "homeId": home.id,
         "userIds": selectedUsers
-      }); // Note the change to userIds
+      });
 
 
 
       setIsModalOpen(false);
-      console.log('Users updated successfully');
+
+
     } catch (error) {
       console.error('Error updating users:', error);
     }
   };
 
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
+
+
 
   return (
     <div className="home-card">
@@ -49,6 +65,7 @@ const HomeCard = ({ home }) => {
       <button onClick={() => setIsModalOpen(true)}>Edit Users</button>
       {isModalOpen && (
         <EditUserModal
+          homeId={home.id}
           homeName={home.street_address}
           selectedUsers={selectedUsers}
           setSelectedUsers={setSelectedUsers}

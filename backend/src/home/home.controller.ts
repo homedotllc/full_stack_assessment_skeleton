@@ -1,17 +1,23 @@
-import { Controller, Get, Query, Put, Body } from '@nestjs/common';
+import { Controller, Get, Query, Put, Body, Patch } from '@nestjs/common';
 import { HomeService } from './home.service';
+import { get } from 'http';
 
 
 @Controller('home')
 export class HomeController {
-  constructor(private readonly homeService: HomeService) {}
+  constructor(private readonly homeService: HomeService) { }
 
 
   @Get('find-all')
-  async findAllHome(){
+  async findAllHome() {
 
     return await this.homeService.findall();
 
+  }
+
+  @Get('fetch-one-home')
+  async FetchOneHome(@Query('id') id: number) {
+    return await this.homeService.FetchOneHome(id);
   }
 
   @Get('find-by-user')
@@ -21,6 +27,8 @@ export class HomeController {
 
   @Put('update-users')
   updateUsers(@Body('homeId') homeId: number, @Body('userIds') userIds: number[]) {
+
+
     return this.homeService.updateUsers(homeId, userIds);
   }
 }

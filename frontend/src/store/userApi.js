@@ -12,15 +12,18 @@ export const userApi = createApi({
     fetchHomesByUser: builder.query({
       query: ({ userId, page }) => `/home/find-by-user?userId=${userId}&page=${page}`,
     }),
+
     fetchUsersByHome: builder.query({
-      query: (streetAddress) => `/user/find-by-home?street_address=${streetAddress}`,
+      query: (homeid) => `/user/find-by-home?homeId=${homeid}`,
     }),
+
+
     updateUsersForHome: builder.mutation({
-      query: ({ homeid, userIds }) => ({
+      query: ({ homeId, userIds }) => ({
         url: '/home/update-users',
         method: 'PUT',
         body: {
-          homeid,
+          homeId,
           userIds, // Updated to match the new request body format
         },
       }),
@@ -33,4 +36,5 @@ export const {
   useFetchHomesByUserQuery,
   useFetchUsersByHomeQuery,
   useUpdateUsersForHomeMutation,
+  
 } = userApi;
