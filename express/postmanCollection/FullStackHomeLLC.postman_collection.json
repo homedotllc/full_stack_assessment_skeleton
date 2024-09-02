@@ -26,6 +26,26 @@
 			"response": []
 		},
 		{
+			"name": "get-all-users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/user/find-all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"user",
+						"find-all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "find-home-by-userId",
 			"request": {
 				"method": "GET",
@@ -84,7 +104,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"homeId\": 1,\n    \"userIds\": [\"user6@example.org\", \"user7@example.org\", \"user10@example.org\"]\n}",
+					"raw": "{\n    \"homeId\": 1,\n    \"userIds\": [\"user6@example.org\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
