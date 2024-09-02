@@ -12,11 +12,14 @@ CREATE TABLE `user_home` (
   `sqft` float DEFAULT NULL,
   `beds` int DEFAULT NULL,
   `baths` int DEFAULT NULL,
-  `list_price` float DEFAULT NULL
+  `list_price` float DEFAULT NULL,
+  `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
-LOCK TABLES `user_home` WRITE;
-INSERT INTO `user_home`
-VALUES (
+-- LOCK TABLES `user_home` WRITE;
+INSERT INTO `user_home` (`username`, `email`, `street_address`, `state`, `zip`, `sqft`, `beds`, `baths`, `list_price`)
+VALUES 
+  (
     'user7',
     'user7@example.org',
     '72242 Jacobson Square',
@@ -54840,3 +54843,61 @@ VALUES (
     3,
     603939
   );
+
+UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS `user` (
+    `email` VARCHAR(100) NOT NULL,
+    `username` VARCHAR(100) DEFAULT NULL,
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+LOCK TABLES `user` WRITE, `user_home` WRITE;
+INSERT INTO `user` (`username`, `email`)
+SELECT DISTINCT `username`, `email` FROM `user_home`;
+UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS `home` (
+	`id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `street_address` VARCHAR(255) NOT NULL,
+    `state` VARCHAR(50) DEFAULT NULL,
+    `zip` VARCHAR(10) DEFAULT NULL,
+    `sqft` FLOAT DEFAULT NULL,
+    `beds` INT DEFAULT NULL,
+    `baths` INT DEFAULT NULL,
+    `list_price` FLOAT DEFAULT NULL,
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+LOCK TABLES `home` WRITE, `user_home` WRITE;
+INSERT INTO `home` (`street_address`, `state`, `zip`, `sqft`, `beds`, `baths`, `list_price`)
+SELECT DISTINCT `street_address`, `state`, `zip`, `sqft`, `beds`, `baths`, `list_price` FROM `user_home`;
+UNLOCK TABLES;
+
+CREATE TABLE IF NOT EXISTS user_home_x_ref (
+	`id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `email` VARCHAR(100) NOT NULL,
+    `home_id` BIGINT UNSIGNED NOT NULL,
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`email`) REFERENCES user(`email`) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`home_id`) REFERENCES home(`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+LOCK TABLES `user_home_x_ref` WRITE, `user_home` WRITE, `home` WRITE;
+INSERT INTO `user_home_x_ref` (email, home_id)
+SELECT user_home.email, home.id
+FROM `user_home`
+JOIN `home` ON user_home.street_address = home.street_address 
+             AND user_home.zip = home.zip 
+             AND user_home.state = home.state 
+             AND user_home.sqft = home.sqft 
+             AND user_home.beds = home.beds 
+             AND user_home.baths = home.baths 
+             AND user_home.list_price = home.list_price;
+UNLOCK TABLES;

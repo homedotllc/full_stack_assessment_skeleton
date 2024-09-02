@@ -1,4 +1,4 @@
-services: 
+services:
   mysql_ctn_final:
     build:
       context: .
@@ -15,6 +15,24 @@ services:
       - 3306:3306
     networks:
       - app_net_2
+
+  node_app:
+    build:
+      context: ./express
+      dockerfile: Dockerfile.node
+    container_name: node_app
+    depends_on:
+      - mysql_ctn_final
+    environment:
+      DB_HOST: mysql_ctn_final
+      DB_USER: db_user
+      DB_PASSWORD: 6equj5_db_user
+      DB_NAME: home_db
+    ports:
+      - 5001:5001
+    networks:
+      - app_net_2
+    restart: on-failure
 
 networks:
   app_net_2:
