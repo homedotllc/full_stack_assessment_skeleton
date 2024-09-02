@@ -21,14 +21,11 @@ class HomeController {
     try {
       const homeId = req?.body?.homeId;
       const userIds = req?.body?.userIds;
-      const resDeleteHomeUsers =
-        await this.userHomeXRefRepository.deleteHomeUsers(homeId);
-      const resAddHomeUsers = await this.userHomeXRefRepository.addHomeUsers(
-        homeId,
-        userIds
-      );
+      await this.userHomeXRefRepository.deleteHomeUsers(homeId);
+      await this.userHomeXRefRepository.addHomeUsers(homeId, userIds);
       res.status(200).send({
-        response: { resDeleteHomeUsers, resAddHomeUsers },
+        status: true,
+        message: "Update Successful",
       });
     } catch (error) {
       res.status(400).send({ error: error?.message });

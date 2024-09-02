@@ -1,22 +1,12 @@
+import {} from "dotenv/config";
 import Express from "express";
 import cors from "cors";
-import { UserRouter } from "./src/routes/UserRoutes.mjs";
 import "./src/database/HomeDatabase.mjs";
+import { UserRouter } from "./src/routes/UserRoutes.mjs";
 import { User } from "./src/models/UserModel.mjs";
 import { Home } from "./src/models/HomeModel.mjs";
 import { UserHomeXRef } from "./src/models/UserHomeXRefModel.mjs";
 import { HomeRouter } from "./src/routes/HomeRoutes.mjs";
-
-// User.belongsToMany(Home, {
-//   through: UserHomeXRef,
-//   foreignKey: "email",
-//   otherKey: "id",
-// });
-// Home.belongsToMany(User, {
-//   through: UserHomeXRef,
-//   foreignKey: "home_id",
-//   otherKey: "email",
-// });
 
 User.belongsToMany(Home, {
   through: UserHomeXRef,

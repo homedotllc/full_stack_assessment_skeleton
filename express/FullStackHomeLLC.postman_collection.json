@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "66427f3e-5136-447f-a6e6-109a343d7c9c",
+		"name": "FullStackHomeLLC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19941481"
+	},
+	"item": [
+		{
+			"name": "status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find-home-by-userId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/home/find-by-user?email=user1@example.org",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"home",
+						"find-by-user"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "user1@example.org"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find-user-by-homeId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/user/find-by-home?homeId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"user",
+						"find-by-home"
+					],
+					"query": [
+						{
+							"key": "homeId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-home-users",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"homeId\": 1,\n    \"userIds\": [\"user6@example.org\", \"user7@example.org\", \"user10@example.org\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/home/update-users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"home",
+						"update-users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,4 +1,3 @@
-import { Sequelize } from "sequelize";
 import { UserHomeXRef } from "../models/UserHomeXRefModel.mjs";
 
 class UserHomeXRefRepository {
@@ -10,7 +9,6 @@ class UserHomeXRefRepository {
           home_id: homeId,
         },
       });
-      console.log("response", response);
       return response;
     } catch (error) {
       console.error("error", error);
@@ -23,11 +21,9 @@ class UserHomeXRefRepository {
         email,
         home_id: homeId,
       }));
-      // Bulk create new associations, which will add only if they don't exist
       const response = await UserHomeXRef.bulkCreate(newAssociations, {
-        updateOnDuplicate: ["email"], // Ensure no duplicates are created
+        updateOnDuplicate: ["email"],
       });
-      console.log("response add", response);
       return response;
     } catch (error) {
       console.error("error", error);

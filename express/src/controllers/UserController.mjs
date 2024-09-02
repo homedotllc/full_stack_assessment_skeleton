@@ -14,12 +14,7 @@ class UserController {
       const response = await User.findAll();
       res.status(200).send({ count: response?.length, response });
     } catch (error) {
-      console.error(
-        "UserController read",
-        error,
-        error?.message,
-        JSON.stringify(error)
-      );
+      console.error("UserController getAllUsers", error);
     }
   }
   async getUsersByHomeId(req, res) {
