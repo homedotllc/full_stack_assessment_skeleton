@@ -154,14 +154,44 @@ docker-compose -f docker-compose.initial.yml up --build -d
     - `beds` INT DEFAULT NULL
     - `baths` INT DEFAULT NULL
     - `list_price` FLOAT DEFAULT NULL
-    - `user_email` VARCHAR(100) NOT NULL
   - constraints:
     - Primary Key: id
-    - Foreign Key: user_email -> `user` table (email) ON DELETE CASCADE ON UPDATE CASCADE
-    - Auto Increment: id
 - Lock user table and user_home table
-- Migrate username and email from user_home table into user table
+- Migrate distinct street_address, state, zip, sqft, beds, baths, list_price from user_home table into user table
 - Unlock tables
+
+- Create table **user_home_x_ref**
+  - columns:
+    - `id` BIGINT UNSIGNED AUTO_INCREMENT
+    - `email` VARCHAR(255) NOT NULL
+    - `home_id` BIGINT UNSIGNED NOT NULL
+  - constraints:
+    - Primary Key: id
+    - Foreign Key: email (references user(email), cascade on update/delete), home_id (references home(id), cascade on update/delete)
+- Lock user_home_x_ref table, user_home table and home table
+- Migrate user and home relationship from user_home table as follows:
+  - Create a join on user_home and home table, where street_address, state, zip, sqft, beds, baths, list_price match in home and user_home tables.
+  - From this join, we only insert the email and home(id) values in the user_home_x_ref table.
+- Unlock tables
+
+Run Container:
+
+cd to root dir
+
+```
+docker-compose -f docker-compose.final.yml up --build -d
+```
+
+login to the mysql server with the db_user username and password to see the database and all the associated tables
+
+Incase there is no database created run the following commands in the root dir of the project:
+
+```
+docker-compose -f docker-compose.final.yml down -v
+// this will delete data in the docker volume if data already exists
+docker-compose -f docker-compose.final.yml up --build -d
+// restart the container and relogin to the sql server with db_user username and password.
+```
 
 ## 2. React SPA
 
