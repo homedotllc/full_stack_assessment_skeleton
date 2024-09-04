@@ -7,3 +7,4 @@ GET {{baseUrl}}/user/find-by-home HTTP/1.1
 GET {{baseUrl}}/home/find-by-user HTTP/1.1
 ###
 POST {{baseUrl}}/home/update-users HTTP/1.1
+Content-Type: application/application/json
