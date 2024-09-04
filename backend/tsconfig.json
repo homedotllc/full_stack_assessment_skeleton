@@ -1,10 +1,15 @@
 {
    "compilerOptions": {
-      "target": "es2016" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
       "lib": [
+         "es5",
+         "es6",
          "es2016",
          "dom"
       ],
+      // "target": "es6",
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "target": "es2016" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
       "allowJs": true,
       "checkJs": true /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
       "module": "commonjs" /* Specify what module code is generated. */,
