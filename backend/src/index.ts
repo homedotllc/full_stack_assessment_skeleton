@@ -10,8 +10,11 @@ const app = express()
 const port = process.env.PORT || 3000
 
 app.use(express.json())
-app.use("/api", userRouter)
-app.use("/api", homeRouter)
+app.use("/api/user", userRouter)
+app.use("/api/home", homeRouter)
+app.get("/", (req, res) => {
+  res.send("working...")
+})
 AppDataSource.initialize()
   .then(() => {
     console.log("Database connected")
