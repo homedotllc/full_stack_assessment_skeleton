@@ -129,7 +129,31 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+We needed to normalize data from a `user_home` table that combined user and home information, reflecting a many-to-many relationship between users and homes.
+
+**Solution Steps:**
+
+1. **Create Tables**:
+   - Created separate `user` and `home` tables to store user attributes and home attributes, respectively.
+
+2. **Populate Tables**:
+   - Extracted unique users and homes from `user_home` and inserted them into the new tables.
+
+3. **Modify `user_home`**:
+   - Added `user_id` and `home_id` columns to `user_home` to link to the `user` and `home` tables.
+
+4. **Update References**:
+   - Updated `user_home` with the correct `user_id` and `home_id` by joining with the newly created tables.
+
+5. **Clean Up**:
+   - Removed redundant columns from `user_home` after populating foreign keys.
+
+6. **Final Script**:
+   - Created a `99_final_db_dump.sql` script to automate these changes and normalize the database.
+
+
+The database was successfully normalized, with separate tables for users and homes and proper foreign key relationships established.
+ 
 
 ## 2. React SPA
 
@@ -220,7 +244,38 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+This project is a simple React Single Page Application (SPA) that demonstrates state management and frontend development skills. The goal is to display homes associated with users and allow updating the users associated with a particular home.
+
+## Features
+
+### 1. Homes for User Page
+- A single-select dropdown allows picking a user.
+- Below the dropdown, homes related to the selected user are shown in cards.
+- The page is responsive, as per the video demo.
+
+### 2. Edit User Functionality
+- Each home card has an "Edit User" button that opens a modal.
+- In the modal, users associated with the home are initially checked.
+- Users can be toggled with checkboxes.
+- Clicking "Cancel" closes the modal without changes, while "Save" updates users in the database and reflects the changes in the UI.
+- Validation ensures at least one user is associated with a home, and if none are selected, the "Save" button is disabled with an error message.
+
+### 3. Data Fetching
+- Handled using **RTK Query** for fetching and caching API data.
+- Shows a loading spinner while fetching data.
+- Errors are gracefully handled and displayed.
+
+### 4. State Management
+- State management is done using **Redux Toolkit** to handle user selection and modal state.
+
+### 5. Tech Stack
+- **Vite** for fast development.
+- **Tailwind CSS** for styling.
+- **RTK Query** for data fetching.
+- **Redux Toolkit** for state management.
+
+The solution is simple, functional,
+and responsive, showcasing state management and frontend development skills.
 
 ## 3. Backend API development on Node
 
@@ -281,7 +336,41 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+We created four REST APIs using Express and Sequelize ORM to handle this.
+
+1. **`/user/find-all`**  
+   - **Purpose**: Fetch all users from the database.
+   - **Method**: `GET`
+   - **Response**: Returns a JSON array of all users.  
+   - **Usage**: Display users in the frontend.
+
+2. **`/home/find-by-user`**  
+   - **Purpose**: Fetch all homes related to a user by `userId`.
+   - **Method**: `GET`
+   - **Response**: Returns homes linked to the specified user.  
+   - **Usage**: Used in the UI to display homes as cards.
+
+3. **`/user/find-by-home`**  
+   - **Purpose**: Fetch all users associated with a home by `homeId`.
+   - **Method**: `GET`
+   - **Response**: Returns a list of users related to the home.  
+   - **Usage**: Used in the Edit Users modal in the UI.
+
+4. **`/home/update-users`**  
+   - **Purpose**: Update the users associated with a specific home.
+   - **Method**: `PUT`
+   - **Request Body**: A list of `userIds` and `homeId` in JSON.
+   - **Response**: Updates the home-user associations in the database.  
+   - **Usage**: Modifies the users linked to a home when saved via the Edit Users modal.
+
+### Implementation:
+
+- **Framework**: We used Express for creating REST APIs.
+- **ORM**: Sequelize ORM handled database interactions.
+- **Data Format**: All data exchanged through JSON.
+- **Sanitization**: Inputs were validated to ensure correct data format.
+- **Idempotence**: `PUT` was used to ensure `home/update-users` is idempotent (repeating the same request results in no further changes).
+
 
 ## Submission Guidelines
 
