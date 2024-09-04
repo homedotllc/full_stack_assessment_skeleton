@@ -1,51 +1,53 @@
+import { useAppSelector } from "@/app/hooks"
 import Card from "@/components/Card"
-import { useState } from "react"
+import Skeleton from "react-loading-skeleton"
+import "react-loading-skeleton/dist/skeleton.css"
 import styles from "./Quotes.module.css"
-import { useGetQuotesQuery } from "./quotesApiSlice"
-
-const options = [5, 10, 20, 30]
+import { selectQuoteLimit, useGetQuotesQuery } from "./quotesApiSlice"
 
 export const Quotes = () => {
-  const [numberOfQuotes, setNumberOfQuotes] = useState(10)
+  // const [numberOfQuotes, setNumberOfQuotes] = useState(10)
   // Using a query hook automatically fetches data and returns query values
-  const { data, isError, isLoading, isSuccess } =
-    useGetQuotesQuery(numberOfQuotes)
+  const quotLimit = useAppSelector(selectQuoteLimit)
+  const { data, isError, isLoading, isSuccess } = useGetQuotesQuery(quotLimit)
+  return (
+    <div className={styles.container}>
+      <h3>Select the Quantity of Quotes to Fetch:</h3>
+      {/* <select
+        className={styles.select}
+        value={numberOfQuotes}
+        onChange={e => {
+          setNumberOfQuotes(Number(e.target.value))
+        }}
+      >
+        {options.map(option => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select> */}
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-4 xl:grid-cols-4 2xl:gap-7.5">
+        {isError && (
+          <div>
+            <h1>There was an error!!!</h1>
+          </div>
+        )}
 
-  if (isError) {
-    return (
-      <div>
-        <h1>There was an error!!!</h1>
-      </div>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    )
-  }
-
-  if (isSuccess) {
-    return (
-      <div className={styles.container}>
-        <h3>Select the Quantity of Quotes to Fetch:</h3>
-        <select
-          className={styles.select}
-          value={numberOfQuotes}
-          onChange={e => {
-            setNumberOfQuotes(Number(e.target.value))
-          }}
-        >
-          {options.map(option => (
-            <option key={option} value={option}>
-              {option}
-            </option>
+        {isLoading &&
+          Array.from({ length: 12 }).map((_, index) => (
+            <div key={index}>
+              <Skeleton className="py-2 mb-2" />
+              <Skeleton count={5} />
+            </div>
           ))}
-        </select>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-4 xl:grid-cols-4 2xl:gap-7.5">
-          {data.quotes.map(({ author, quote, id }) => (
+        {/* {Array.from({ length: 12 }).map((_, index) => (
+          <div key={index}>
+            <Skeleton className="py-2 mb-2" />
+            <Skeleton count={5} />
+          </div>
+        ))} */}
+        {isSuccess &&
+          data.quotes.map(({ author, quote, id }) => (
             <Card key={id}>
               <blockquote className="mb-2">
                 &ldquo;{quote}&rdquo;
@@ -72,10 +74,7 @@ export const Quotes = () => {
               </div>
             </Card>
           ))}
-        </div>
       </div>
-    )
-  }
-
-  return null
+    </div>
+  )
 }

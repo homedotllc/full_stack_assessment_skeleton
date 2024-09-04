@@ -1,6 +1,18 @@
+import { useAppDispatch } from "@/app/hooks"
+import { setQuoteLimit } from "@/features/quotes/quotesApiSlice"
 import Dropdown from "../Dropdown"
-
+const options = [
+  { label: "Select count (5)", value: 5 },
+  { label: "5", value: 5 },
+  { label: "10", value: 10 },
+  { label: "15", value: 15 },
+  { label: "20", value: 20 }
+]
 const Header = () => {
+  // const [selectUser, setSelectUser] = useState(5)
+  // console.log(selectUser)
+  const dispatch = useAppDispatch()
+
   return (
     // <header className="absolute inset-x-0 top-0 z-50">
     <header className="sticky top-0 z-999 w-full drop-shadow-10">
@@ -20,7 +32,10 @@ const Header = () => {
         </div>
 
         <div className="flex flex-1 justify-end">
-          <Dropdown />
+          <Dropdown
+            onChange={e => dispatch(setQuoteLimit(e))}
+            options={options}
+          />
         </div>
       </nav>
     </header>
