@@ -1,6 +1,5 @@
 const User = require("../models/userModel");
 const Home = require("../models/homeModel");
-// const UserHomeRelation = require('../models/userHomeRelationModel');
 
 // Find all users
 exports.findAllUsers = async (req, res) => {
