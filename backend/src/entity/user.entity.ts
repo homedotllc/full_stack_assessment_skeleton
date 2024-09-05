@@ -1,18 +1,31 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { UserHome } from "./userHome.entity"
 
-@Entity()
+@Entity({ name: "x_user" })
 export class User {
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @PrimaryGeneratedColumn()
-    id: number
+  @Column()
+  username: string
 
-    @Column()
-    firstName: string
+  @Column()
+  email: string
 
-    @Column()
-    lastName: string
+  @OneToMany(() => UserHome, userHome => userHome.user)
+  userHomes: UserHome[]
 
-    @Column()
-    age: number
-
+  // @ManyToMany(() => Home, home => home.user)
+  // @JoinTable({
+  //   name: "x_user_home",
+  //   joinColumn: {
+  //     name: "user_id",
+  //     referencedColumnName: "id"
+  //   },
+  //   inverseJoinColumn: {
+  //     name: "home_id",
+  //     referencedColumnName: "id"
+  //   }
+  // })
+  // home: Home[]
 }
