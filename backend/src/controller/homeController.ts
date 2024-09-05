@@ -1,17 +1,115 @@
-import express from 'express'
+import express from 'express';
+import { AppDataSource } from '../data-source';
+import { User } from '../entities/User';
+import { Home } from '../entities/Home';
 
-const findByUser = (req: express.Request , res: express.Response) => {
-    console.log('inside find by user')
-    return res.json({'message' : 'reached'})
-}
+const findByUser = async (req: express.Request, res: express.Response): Promise<express.Response> => {
+    try {
+        const userId = parseInt(req.query.userId as string, 10);
+        if (isNaN(userId)) {
+            return res.status(400).json({ message: 'Invalid userId' });
+        }
+
+        // pagination
+        const page = parseInt(req.query.page as string, 10) || 1;
+        const limit = parseInt(req.query.limit as string, 10) || 50;
+        const skip = (page - 1) * limit;
+
+        const userRepository = AppDataSource.getRepository(User);
+        const user = await userRepository.findOne({
+            where: { id: userId },
+            relations: ['homes'],
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // paginating the homes array
+        const homes = user.homes.slice(skip, skip + limit);
+        const totalHomes = user.homes.length;
+        const totalPages = Math.ceil(totalHomes / limit);
+
+        return res.json({
+            homes,
+            pagination: {
+                page,
+                limit,
+                totalHomes,
+                totalPages
+            }
+        });
+    } catch (error) {
+        console.error('Error finding homes by user:', error);
+        return res.status(500).json({ message: 'Error finding homes by user' });
+    }
+};
 
 
-const updateUsers = (req: express.Request , res: express.Response) => {
-    console.log('inside update users')
-    return res.json({'message' : 'reached'})
-}
+const getUsersByHome = async (req: express.Request, res: express.Response): Promise<express.Response> => {
+    try {
+        const homeId = parseInt(req.query.homeId as string, 10);
+        if (isNaN(homeId)) {
+            return res.status(400).json({ message: 'Invalid homeId' });
+        }
+
+        const homeRepository = AppDataSource.getRepository(Home);
+        const home = await homeRepository.findOne({
+            where: { id: homeId },
+            relations: ['users'],
+        });
+
+        if (!home) {
+            return res.status(404).json({ message: 'Home not found' });
+        }
+
+        return res.json(home); 
+    } catch (error) {
+        console.error('Error finding users by home:', error);
+        return res.status(500).json({ message: 'Error finding users by home' });
+    }
+};
+
+
+const updateUsers = async (req: express.Request, res: express.Response): Promise<express.Response> => {
+    try {
+        const { homeId, userIds } = req.body;
+        if (!homeId || !Array.isArray(userIds) || userIds.length === 0) {
+            return res.status(400).json({ message: 'Invalid input' });
+        }
+
+        const homeRepository = AppDataSource.getRepository(Home);
+        const userRepository = AppDataSource.getRepository(User);
+
+        const home = await homeRepository.findOne({
+            where: { id: homeId },
+            relations: ['users'],
+        });
+
+        if (!home) {
+            return res.status(404).json({ message: 'Home not found' });
+        }
+
+        const users = await userRepository.findByIds(userIds);
+
+        if (users.length !== userIds.length) {
+            return res.status(404).json({ message: 'Some users not found' });
+        }
+
+        // Updating home with new users
+        home.users = users;
+        await homeRepository.save(home);
+
+        return res.json({ message: 'Users updated successfully' });
+    } catch (error) {
+        console.error('Error updating users:', error);
+        return res.status(500).json({ message: 'Error updating users' });
+    }
+};
 
 
 export default {
-    findByUser , updateUsers
-}
+    findByUser,
+    getUsersByHome,
+    updateUsers,
+};

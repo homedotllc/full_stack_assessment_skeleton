@@ -1,35 +1,24 @@
-const express = require('express')
+import express from 'express';
+import { AppDataSource } from './data-source';
+import { seedData } from './data-seeder';
 
-/*
-AppDataSource.initialize().then(async () => {
-    console.log("Inserting a new user into the database...")
-    const user = new User()
-    user.firstName = "Timber"
-    user.lastName = "Saw"
-    user.age = 25
-    await AppDataSource.manager.save(user)
-    console.log("Saved a new user with id: " + user.id)
+const app = express();
+const EXPRESS_PORT = process.env.EXPRESS_PORT || 3000;
 
-    console.log("Loading users from the database...")
-    const users = await AppDataSource.manager.find(User)
-    console.log("Loaded users: ", users)
+const startServer = async () => {
+    try {
+        await AppDataSource.initialize();
+        console.log('Database connection established');
 
-    console.log("Here you can setup and run express / fastify / any other framework.")
+        // seed the data
+        await seedData(); 
 
-}).catch(error => console.log(error))
-*/
+        app.listen(EXPRESS_PORT, () => {
+            console.log(`Server is running on PORT : ` , EXPRESS_PORT);
+        });
+    } catch (error) {
+        console.error('Error in start server :', error);
+    }
+};
 
-const app = express()
-
-const PORT = 3000 
-
-// middlewares 
-
-
-// routes
-app.use('/user' , require('./routes/userRoute'))
-app.use('/home' , require('./routes/homeRoute'))
-
-app.listen(PORT , () => {
-    console.log('Server is listening on PORT : ' , PORT)
-})
+startServer();

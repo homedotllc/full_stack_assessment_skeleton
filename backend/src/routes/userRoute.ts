@@ -1,12 +1,13 @@
-const express = require('express')
-const router = express.Router()
+import express from 'express'
+const router = express.Router();
 
-// controllers 
-import userController from '../controller/userController'
+// controllers
+import userController from '../controller/userController';
 
-router.get('/find-all' , userController.findAll)
-router.get('/find-by-home' , userController.findByHome)
+// get all users
+router.get('/find-all', userController.findAll);
 
+// get all users by homeId
+router.get('/find-by-home/:homeId', userController.findByHome);
 
-
-module.exports = router
+export default router;

@@ -1,11 +1,16 @@
-const express = require('express')
-const router = express.Router()
+import express from 'express'
+const router = express.Router();
 
+// controllers
+import homeController from '../controller/homeController';
 
-router.get('/find-by-user')
-router.patch('/update-user')
+// find all homes by userId
+router.get('/find-by-user', homeController.findByUser);
 
-module.exports = router
+// get all users by homeId
+router.get('/get-users-by-home/:homeId', homeController.getUsersByHome);
 
+// take a bunch of new userId's and homeId and set them
+router.patch('/update-users', homeController.updateUsers);
 
-export {}
+export default router;
