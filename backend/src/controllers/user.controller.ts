@@ -11,8 +11,7 @@ export class UserController {
       let users = await userRepository.find()
 
       res.status(200).json({
-        controller: "findAll",
-        users: users
+        result: users
       })
     } catch (error) {
       res.status(500).json({ error: error })
@@ -22,6 +21,10 @@ export class UserController {
     try {
       let homeId = parseInt(req.params.homeId)
 
+      if (!homeId) {
+        return res.status(400).json({ error: "Invalid input" })
+      }
+
       const userRepository = AppDataSource.getRepository(User)
 
       const users = await userRepository
@@ -30,10 +33,8 @@ export class UserController {
         .where("userHome.homeId = :homeId", { homeId })
         .getMany()
 
-      res.status(200).json({ controller: "findByHome", users: users || [] })
+      res.status(200).json({ result: users || [] })
     } catch (error) {
-      console.log(error)
-
       res.status(500).json({ error: error })
     }
   }
