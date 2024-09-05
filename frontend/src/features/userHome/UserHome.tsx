@@ -8,9 +8,10 @@ import { selectUserId } from "./userHomeSlice"
 export const UserHome = () => {
   // const [numberOfQuotes, setNumberOfQuotes] = useState(10)
   // Using a query hook automatically fetches data and returns query values
-  const quotLimit = useAppSelector(selectUserId)
-  const { data, isError, isLoading, isSuccess } =
-    useGetFindByUserQuery(quotLimit)
+  const userId = useAppSelector(selectUserId)
+  const { data, isError, isLoading, isSuccess } = useGetFindByUserQuery({
+    userId
+  })
 
   return (
     <>

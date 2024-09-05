@@ -1,15 +1,11 @@
 import { useAppDispatch } from "@/app/hooks"
+import { useGetAllUsersQuery } from "@/features/userHome/userHomeApiSlice"
 import { setUserId } from "@/features/userHome/userHomeSlice"
 import Dropdown from "../Dropdown"
-const options = [
-  { label: "Select count (5)", value: 5 },
-  { label: "5", value: 5 },
-  { label: "10", value: 10 },
-  { label: "15", value: 15 },
-  { label: "20", value: 20 }
-]
+
 const Header = () => {
   const dispatch = useAppDispatch()
+  const { data: users, isSuccess } = useGetAllUsersQuery()
 
   return (
     <header className="sticky bg-white top-0 z-999 w-full shadow-md drop-shadow-10">
@@ -29,7 +25,17 @@ const Header = () => {
         </div>
 
         <div className="flex flex-1 justify-end">
-          <Dropdown onChange={e => dispatch(setUserId(e))} options={options} />
+          <Dropdown
+            onChange={e => dispatch(setUserId(e))}
+            options={
+              !isSuccess
+                ? []
+                : users.result.map(({ username, id }) => ({
+                    label: username,
+                    value: id
+                  }))
+            }
+          />
         </div>
       </nav>
     </header>

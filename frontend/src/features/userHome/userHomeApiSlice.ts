@@ -1,14 +1,19 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
-export interface FindByUseResponse {
+export interface FindByUserResponse {
   total: number
   page: number
   pageSize: number
   totalPages: number
-  result: FindByUseResult[]
+  result: HomeInfo[]
+}
+export interface FindByUserRequest {
+  userId: number
+  pageSize?: number
+  page?: number
 }
 
-export interface FindByUseResult {
+export interface HomeInfo {
   id: number
   street_address: string
   state: string
@@ -19,21 +24,37 @@ export interface FindByUseResult {
   list_price: string
 }
 
+export interface AllUsersResponse {
+  result: UserInfo[]
+}
+
+export interface UserInfo {
+  id: number
+  username: string
+  email: string
+}
+
 // Define a service using a base URL and expected endpoints
 export const userHomeApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL || "http://localhost:3000/"
   }),
   reducerPath: "userHomeApiSlice",
-  // Tag types are used for caching and invalidation.
   tagTypes: ["UserHome"],
   endpoints: build => ({
-    getFindByUser: build.query<FindByUseResponse, number>({
-      query: (userId, pageSize = 50, page = 1) =>
+    // Set types for input in pagination (assuming)
+    getFindByUser: build.query<FindByUserResponse, FindByUserRequest>({
+      query: ({ userId, pageSize = 50, page = 1 }) =>
         `home/find-by-user/${userId}?pageSize=${pageSize}&page=${page}`,
-      providesTags: (result, error, id) => [{ type: "UserHome", id }]
+      providesTags: (result, error, { userId }) => [
+        { type: "UserHome", id: userId }
+      ]
+    }),
+    getAllUsers: build.query<AllUsersResponse, void>({
+      query: () => `/user/find-all`,
+      providesTags: (result, error) => [{ type: "UserHome" }]
     })
   })
 })
 
-export const { useGetFindByUserQuery } = userHomeApiSlice
+export const { useGetFindByUserQuery, useGetAllUsersQuery } = userHomeApiSlice
