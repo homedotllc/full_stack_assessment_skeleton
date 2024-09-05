@@ -4,7 +4,7 @@ import { toggleModalState } from '../features/ui/uiSlice'
 const Card = () => {
   const dispatch = useDispatch()
   return (
-    <div className='w-80 h-auto bg-white border-gray-200 shadow-2xl content-start mx-4 my-2'>
+    <div className='w-80 h-auto bg-white border border-gray-100 shadow-lg content-start mx-4 my-2'>
         <div className="w-full h-auto flex flex-row justify-start items-center">
           <p className="text-xl font-medium px-4 py-2">Title</p>
         </div>

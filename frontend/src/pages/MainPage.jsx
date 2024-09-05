@@ -8,9 +8,10 @@ const options = [
 
 const MainPage = () => {
   return (
-    <div className='w-screen h-screen overflow-hidden flex flex-col justify-start items-center bg-orange-500'>
-        <div className="w-full h-16 flex flex-row justify-end items-center bg-purple-500 py-2">
-            <select className="w-60 h-10 mx-20 rounded-lg">
+    <div className='w-screen h-screen overflow-hidden flex flex-col justify-start items-center bg-white'>
+        <div className="w-full h-16 flex flex-row justify-end items-center py-2">
+            <label className="-mx-16">Select from:</label>
+            <select className="w-24 h-10 mx-20 rounded-lg border border-gray-300">
               <option>None</option>
               {
                 options.map((option , index) => (
@@ -20,7 +21,7 @@ const MainPage = () => {
             </select>
         </div>
         <Modal />
-        <div className="w-full h-full flex flex-wrap content-start bg-yellow-500 py-4 px-14">
+        <div className="w-full h-full flex flex-wrap content-start py-4 px-14">
             <Card />
             <Card />
             <Card />
