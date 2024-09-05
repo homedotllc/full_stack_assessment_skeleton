@@ -2,7 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import { useGetUsersQuery } from "./store/slices/apiSlice";
 import Homes from "./components/Homes";
-import Spinner from './components/Spinner';
+import Spinner from "./components/Spinner";
 
 function App() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -23,16 +23,17 @@ function App() {
 
   return (
     <>
-    
       <div className="w-full text-right flex justify-end items-center">
-        <p>Select User: {' '}</p>
+        <p>Select User: </p>
         <select onChange={handleChange} className="px-4 py-2 border">
           <option value="">Select a User</option>
-          {users.filter(user => user.username !== "" && user.email !== "").map((user) => (
-            <option key={user.id} value={user.id}>
-              {user.username}
-            </option>
-          ))}
+          {users
+            .filter((user) => user.username !== "" && user.email !== "")
+            .map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.username}
+              </option>
+            ))}
         </select>
       </div>
       {selectedUser && <Homes selectedUser={selectedUser} />}
