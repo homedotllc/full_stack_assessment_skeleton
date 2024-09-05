@@ -8,12 +8,12 @@ const Home = (props) => {
 
   const handleClick = (home) => {
     setSelectedHome(home);
-    setIsModalOpen(true); // Open the modal
+    setIsModalOpen(true); 
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
-    setSelectedHome(null); // Reset selected home when modal is closed
+    setIsModalOpen(false); 
+    setSelectedHome(null); 
   };
 
   const home = props.home;
