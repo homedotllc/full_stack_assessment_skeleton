@@ -1,8 +1,8 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm"
-import { User } from "./user.entity"
 import { Home } from "./home.entity"
+import { User } from "./user.entity"
 
-@Entity({ name: "x_user_home" })
+@Entity({ name: "home_user" })
 export class UserHome {
   @PrimaryColumn({ name: "user_id" })
   userId: number
