@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/app/hooks"
-import { setQuoteLimit } from "@/features/quotes/quotesApiSlice"
+import { setUserId } from "@/features/userHome/userHomeSlice"
 import Dropdown from "../Dropdown"
 const options = [
   { label: "Select count (5)", value: 5 },
@@ -9,13 +9,10 @@ const options = [
   { label: "20", value: 20 }
 ]
 const Header = () => {
-  // const [selectUser, setSelectUser] = useState(5)
-  // console.log(selectUser)
   const dispatch = useAppDispatch()
 
   return (
-    // <header className="absolute inset-x-0 top-0 z-50">
-    <header className="sticky top-0 z-999 w-full drop-shadow-10">
+    <header className="sticky bg-white top-0 z-999 w-full shadow-md drop-shadow-10">
       <nav
         aria-label="Global"
         className="flex items-center justify-between p-6 lg:px-8"
@@ -32,10 +29,7 @@ const Header = () => {
         </div>
 
         <div className="flex flex-1 justify-end">
-          <Dropdown
-            onChange={e => dispatch(setQuoteLimit(e))}
-            options={options}
-          />
+          <Dropdown onChange={e => dispatch(setUserId(e))} options={options} />
         </div>
       </nav>
     </header>

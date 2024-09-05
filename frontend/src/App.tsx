@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
 import Header from "./components/Header"
-import { Quotes } from "./features/quotes/Quotes"
+import { UserHome } from "./features/userHome/UserHome"
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -30,9 +30,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
 const App = () => {
   return (
     <DefaultLayout>
-      <Quotes />
-      {/* <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 xl:grid-cols-6 2xl:gap-7.5">
-      </div> */}
+      <UserHome />
     </DefaultLayout>
   )
 }
