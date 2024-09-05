@@ -1,0 +1,15 @@
+@baseUrl=http://localhost:3000/api
+###
+GET {{baseUrl}}/user/find-all HTTP/1.1
+###
+GET {{baseUrl}}/user/find-by-home/2 HTTP/1.1
+### # make paginated if possible
+GET {{baseUrl}}/home/find-by-user/2?pageSize=1&page=1 HTTP/1.1
+###
+POST {{baseUrl}}/home/update-users HTTP/1.1
+Content-Type: application/json
+
+{
+    "homeId":1,
+    "userIds":[1,2,3]
+}
