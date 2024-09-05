@@ -1,4 +1,5 @@
 import Card from "../components/Card"
+import Modal from "../components/Modal"
 
 const options = [
   "user1",
@@ -18,6 +19,7 @@ const MainPage = () => {
               }
             </select>
         </div>
+        <Modal />
         <div className="w-full h-full flex flex-wrap content-start bg-yellow-500 py-4 px-14">
             <Card />
             <Card />
