@@ -53,20 +53,20 @@ const getAllUsersByHome = async (req, res) => {
 
     // Fetch all users
     const users = await User.findAll({
-      attributes: ['id', 'username', 'email'],
+      attributes: ["id", "username", "email"],
     });
 
     // Fetch users associated with the home
     const associatedUsers = await UserHome.findAll({
       where: { home_id: homeId },
-      attributes: ['user_id'],
+      attributes: ["user_id"],
     });
 
     // Create a Set of user IDs associated with the home
-    const associatedUserIds = new Set(associatedUsers.map(uh => uh.user_id));
+    const associatedUserIds = new Set(associatedUsers.map((uh) => uh.user_id));
 
     // Add `isAssociated` field to each user
-    const usersWithAssociation = users.map(user => ({
+    const usersWithAssociation = users.map((user) => ({
       ...user.toJSON(),
       isAssociated: associatedUserIds.has(user.id),
     }));
@@ -78,8 +78,44 @@ const getAllUsersByHome = async (req, res) => {
   }
 };
 
+const getPaginatedHomesByUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { page = 1, limit = 10 } = req.query; // Default page 1, limit 10
+    const offset = (page - 1) * limit;
+
+    // Check if user exists
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Find homes related to the user with pagination
+    const { rows: homes, count: totalHomes } = await Home.findAndCountAll({
+      include: {
+        model: User,
+        where: { id: userId },
+        through: { attributes: [] }, // Exclude the junction table attributes
+      },
+      limit: parseInt(limit),
+      offset: offset,
+    });
+
+    const totalPages = Math.ceil(totalHomes / limit);
+
+    res.status(200).json({
+      homes: homes,
+      totalPages: totalPages,
+      currentPage: parseInt(page),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getHomesByUser,
   updateUsersForHome,
   getAllUsersByHome,
+  getPaginatedHomesByUser,
 };
