@@ -1,11 +1,23 @@
-import { useAppDispatch } from "@/app/hooks"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useGetAllUsersQuery } from "@/features/userHome/userHomeApiSlice"
-import { setUserId } from "@/features/userHome/userHomeSlice"
+import {
+  selectAllUsers,
+  setAllUsers,
+  setUserId
+} from "@/features/userHome/userHomeSlice"
+import { useEffect } from "react"
 import Dropdown from "../Dropdown"
 
 const Header = () => {
   const dispatch = useAppDispatch()
-  const { data: users, isSuccess } = useGetAllUsersQuery()
+  const { data } = useGetAllUsersQuery()
+  useEffect(() => {
+    if (data) {
+      dispatch(setAllUsers(data.result))
+    }
+  }, [data, dispatch])
+
+  const allUsers = useAppSelector(selectAllUsers)
 
   return (
     <header className="sticky bg-white top-0 z-999 w-full shadow-md drop-shadow-10">
@@ -27,14 +39,10 @@ const Header = () => {
         <div className="flex flex-1 justify-end">
           <Dropdown
             onChange={e => dispatch(setUserId(e))}
-            options={
-              !isSuccess
-                ? []
-                : users.result.map(({ username, id }) => ({
-                    label: username,
-                    value: id
-                  }))
-            }
+            options={allUsers.map(({ username, id }) => ({
+              label: username,
+              value: id
+            }))}
           />
         </div>
       </nav>

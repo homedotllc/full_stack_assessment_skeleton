@@ -2,14 +2,12 @@ import { useAppSelector } from "@/app/hooks"
 import Card from "@/components/Card"
 import Skeleton from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
-import { useGetFindByUserQuery } from "./userHomeApiSlice"
+import { useGetHomeByUserIdQuery } from "./userHomeApiSlice"
 import { selectUserId } from "./userHomeSlice"
 
 export const UserHome = () => {
-  // const [numberOfQuotes, setNumberOfQuotes] = useState(10)
-  // Using a query hook automatically fetches data and returns query values
   const userId = useAppSelector(selectUserId)
-  const { data, isError, isLoading, isSuccess } = useGetFindByUserQuery({
+  const { data, isError, isLoading, isSuccess } = useGetHomeByUserIdQuery({
     userId
   })
 
