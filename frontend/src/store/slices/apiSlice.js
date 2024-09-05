@@ -13,6 +13,10 @@ export const apiSlice = createApi({
     getHomesByUser: builder.query({
       query: (userId) => `home/find-by-user/${userId}`,
     }),
+    getPaginatedHomesByUser: builder.query({
+      query: ({ userId, page = 1, limit = 10 }) =>
+        `home/find-by-user/${userId}?page=${page}&limit=${limit}`,
+    }),
     updateUsersForHome: builder.mutation({
       query: ({ homeId, userIds }) => ({
         url: `home/update-users/${homeId}`, // No leading slash
@@ -27,5 +31,6 @@ export const {
   useGetUsersQuery,
   useGetUsersByHomeQuery,
   useGetHomesByUserQuery,
+  useGetPaginatedHomesByUserQuery,
   useUpdateUsersForHomeMutation,
 } = apiSlice;
