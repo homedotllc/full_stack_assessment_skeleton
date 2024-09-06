@@ -5,7 +5,8 @@ const initialState = {
     homesList : [],
     currentHome : null,
     pageNumber : 1,
-    totalPages : 0
+    totalPages : 0,
+    homesLoading : false
 }
 
 const homeSlice = createSlice({
@@ -31,9 +32,13 @@ const homeSlice = createSlice({
     extraReducers : (builder) => {
         builder
         .addCase(fetchHomesByUser.fulfilled , (state , action) => {
+            state.homesLoading = false
             state.homesList = action.payload.homes
             state.totalPages = action.payload.pagination.totalPages
             console.log('state.homesList : ' , state.homesList)
+        })
+        .addCase(fetchHomesByUser.pending , (state) => {
+            state.homesLoading = true
         })
         .addCase(fetchHomesByUser.rejected , (state , action) => {
             console.log('fetchHomesByUser rejected : ')
