@@ -1,15 +1,34 @@
-# Backend Explanation
+## Backend Solution Overview
 
-## Overview
+The backend of the assignment is built using Express.js with TypeScript and TypeORM. It includes routes and controllers for managing `User` and `Home` entities in a MySQL database.
 
-The backend of the assignment is built using Express.js with Typescript and TypeORM. It includes routes and controllers for managing `User` and `Home` entities in MySQL database.
+### `backend` Directory Structure
+```
+backend/
+├── .env                          # Environment variables configuration
+├── .gitignore                     # Specifies files and directories to be ignored by Git
+├── node_modules/                 # Directory where project dependencies are installed
+├── package-lock.json             # Lockfile for the project's dependencies
+├── package.json                  # Project metadata and dependency definitions
+├── README.md                     # Project documentation and overview
+├── tree.txt                      # Directory tree structure file (optional)
+├── tsconfig.json                 # TypeScript configuration file
+└── src/
+    ├── data-source.ts            # Database connection and configuration
+    ├── index.ts                  # Entry point of the application
+    ├── config/                   # Configuration files and settings
+    ├── controller/               
+    │   ├── homeController.ts     # Controller for handling home-related requests
+    │   └── userController.ts     # Controller for handling user-related requests
+    ├── entities/                 
+    │   ├── Home.ts               # Home entity definition
+    │   └── User.ts               # User entity definition               
+    ├── routes/                   
+    │   ├── homeRoute.ts          # Routes related to home functionality
+    │   └── userRoute.ts          # Routes related to user functionality
+    └── utils/                    # Utility functions and helpers
+```
 
-### File Structure
-
-- `homeRoute.ts`: Defines routes related to homes.
-- `homeController.ts`: Contains logic for handling requests related to homes.
-- `userRoute.ts`: Defines routes related to users.
-- `userController.ts`: Contains logic for handling requests related to users.
 
 ## `homeRoute.ts`
 
@@ -94,3 +113,5 @@ This file contains the logic for handling the requests defined in `userRoute.ts`
    - **Logic**:
      - Finds the home by `homeId` and includes related users.
      - Returns the home details and associated users or an error message.
+
+
