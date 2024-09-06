@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    openModal : false
+    openModal : false,
 }
 
 const uiSlice = createSlice({
@@ -14,5 +14,5 @@ const uiSlice = createSlice({
     }
 })
 
-export const {toggleModalState} = uiSlice.actions
+export const {toggleModalState , showPageModal} = uiSlice.actions
 export default uiSlice.reducer

@@ -20,7 +20,6 @@ const MainPage = () => {
   const pageNumber = useSelector((state) => state.home.pageNumber)
   const currentUser = useSelector((state) => state.user.currentUser)
   const totalPages = useSelector((state) => state.home.totalPages)
-  const openModal = useSelector((state) => state.ui.openModal)
 
   // dispatch
   const dispatch = useDispatch();
@@ -40,6 +39,7 @@ const MainPage = () => {
       dispatch(fetchHomesByUser({userId : user.id , page : pageNumber , limit : '50'}))
     }else{
       dispatch(resetHomesList())
+      dispatch(setCurrentUser({currentUser : null}))
       console.log('Nothing to show')
     }
   }
