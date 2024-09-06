@@ -3,7 +3,8 @@ import {
   AllUsersResponse,
   FindHomeByUserIdRequest,
   FindHomeByUserIdResponse,
-  FindUserByHomeIdRequest
+  FindUserByHomeIdRequest,
+  UpdateUserPayload
 } from "./types"
 
 // Define a service using a base URL and expected endpoints
@@ -12,7 +13,7 @@ export const userHomeApiSlice = createApi({
     baseUrl: import.meta.env.VITE_BASE_URL || "http://localhost:3000/api/"
   }),
   reducerPath: "userHomeApiSlice",
-  tagTypes: ["UserHome"],
+  tagTypes: ["User", "Home"],
   endpoints: build => ({
     // Set types for input in pagination (assuming)
     getHomeByUserId: build.query<
@@ -21,19 +22,35 @@ export const userHomeApiSlice = createApi({
     >({
       query: ({ userId, pageSize = 50, page = 1 }) =>
         `home/find-by-user/${userId}?pageSize=${pageSize}&page=${page}`,
-      providesTags: (result, error, { userId }) => [
-        { type: "UserHome", id: userId }
-      ]
+      providesTags: result =>
+        result?.result
+          ? [
+              ...result.result.map(({ id }) => ({ type: "Home" as const, id })),
+              { type: "Home", id: "LIST" }
+            ]
+          : [{ type: "Home", id: "LIST" }]
+
+      //    [
+      //   { type: "Home", id: userId }
+      // ]
     }),
     getAllUsers: build.query<AllUsersResponse, void>({
       query: () => `user/find-all`,
-      providesTags: (result, error) => [{ type: "UserHome" }]
+      providesTags: () => [{ type: "User" }]
     }),
     getUserByHomeId: build.query<AllUsersResponse, FindUserByHomeIdRequest>({
       query: ({ homeId }) => `user/find-by-home/${homeId}`,
       providesTags: (result, error, { homeId }) => [
-        { type: "UserHome", id: homeId }
+        { type: "User", id: homeId }
       ]
+    }),
+    updateUsers: build.mutation<void, UpdateUserPayload>({
+      query: payload => ({
+        url: "home/update-users",
+        method: "POST",
+        body: payload
+      }),
+      invalidatesTags: [{ type: "Home", id: "LIST" }]
     })
   })
 })
@@ -41,5 +58,6 @@ export const userHomeApiSlice = createApi({
 export const {
   useGetHomeByUserIdQuery,
   useGetAllUsersQuery,
-  useGetUserByHomeIdQuery
+  useGetUserByHomeIdQuery,
+  useUpdateUsersMutation
 } = userHomeApiSlice

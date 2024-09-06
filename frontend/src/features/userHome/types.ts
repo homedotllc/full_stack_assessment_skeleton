@@ -34,3 +34,8 @@ export interface UserInfo {
   username: string
   email: string
 }
+
+export interface UpdateUserPayload {
+  homeId: number
+  userIds: number[]
+}
