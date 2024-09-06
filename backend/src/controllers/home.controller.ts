@@ -7,7 +7,6 @@ import { UserHome } from "../entity/userHome.entity"
 
 export class HomeController {
   static async updateUser(req: Request, res: Response) {
-    // try {
     const { userIds } = req.body
     const homeId = parseInt(req.body.homeId)
 
@@ -62,13 +61,9 @@ export class HomeController {
     )
 
     return res.status(200).json({ message: "Users updated successfully" })
-    // } catch (error) {
-    //   res.status(500).json({ error: error })
-    // }
   }
 
   static async findByUser(req: Request, res: Response) {
-    // try {
     let userId = parseInt(req.params.userId)
 
     const page = parseInt(req.query.page as string) || 1
@@ -104,8 +99,5 @@ export class HomeController {
       totalPages: Math.ceil(total / pageSize),
       result: homes
     })
-    // } catch (error) {
-    //   res.status(500).json({ error: error })
-    // }
   }
 }

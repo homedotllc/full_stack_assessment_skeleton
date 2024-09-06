@@ -5,20 +5,19 @@ import { UserHome } from "../entity/userHome.entity"
 
 export class UserController {
   static async findAll(req: Request, res: Response) {
-    // try {
     let userRepository = AppDataSource.getRepository(User)
 
-    let users = await userRepository.find()
+    let users = await userRepository.find({
+      order: {
+        username: "ASC"
+      }
+    })
 
     res.status(200).json({
       result: users
     })
-    // } catch (error) {
-    //   res.status(500).json({ error: error })
-    // }
   }
   static async findByHome(req: Request, res: Response) {
-    // try {
     let homeId = parseInt(req.params.homeId)
 
     if (!homeId) {
@@ -34,8 +33,5 @@ export class UserController {
       .getMany()
 
     res.status(200).json({ result: users || [] })
-    // } catch (error) {
-    //   res.status(500).json({ error: error })
-    // }
   }
 }
