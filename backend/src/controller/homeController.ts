@@ -74,7 +74,7 @@ const getUsersByHome = async (req: express.Request, res: express.Response): Prom
             return res.status(404).json({ message: 'Home not found' });
         }
 
-        return res.json(home); 
+        return res.json({data : home}); 
     } catch (error) {
         console.error('Error finding users by home:', error);
         return res.status(500).json({ message: 'Error finding users by home' });
