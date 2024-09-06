@@ -40,7 +40,7 @@ export const userHomeApiSlice = createApi({
     }),
     getUserByHomeId: build.query<AllUsersResponse, FindUserByHomeIdRequest>({
       query: ({ homeId }) => `user/find-by-home/${homeId}`,
-      providesTags: (result, error, { homeId }) => [
+      providesTags: (_, __, { homeId }) => [
         { type: "User", id: "LIST" },
         { type: "User", id: homeId }
       ]

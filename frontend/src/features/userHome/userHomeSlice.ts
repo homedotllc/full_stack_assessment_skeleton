@@ -3,12 +3,12 @@ import { createAppSlice } from "@/app/createAppSlice"
 import { PayloadAction } from "@reduxjs/toolkit"
 import { UserInfo } from "./types"
 export interface UserHomeState {
-  userId: number
+  userId: number | null
   allUsers: UserInfo[]
 }
 
 const initialState: UserHomeState = {
-  userId: 1,
+  userId: null,
   allUsers: []
 }
 
@@ -20,7 +20,7 @@ export const userHomeSlice = createAppSlice({
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: create => ({
     // Use the `PayloadAction` type to declare the contents of `action.payload`
-    setUserId: create.reducer((state, action: PayloadAction<number>) => {
+    setUserId: create.reducer((state, action: PayloadAction<number | null>) => {
       state.userId = action.payload
     }),
     setAllUsers: create.reducer((state, action: PayloadAction<UserInfo[]>) => {

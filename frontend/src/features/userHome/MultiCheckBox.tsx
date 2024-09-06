@@ -10,16 +10,21 @@ import { selectAllUsers } from "./userHomeSlice"
 
 interface MultiSelectCheckboxProps {
   homeInfo: HomeInfo
+  onSubmit: () => void
+  onCancel: () => void
 }
 
 const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
-  homeInfo
+  homeInfo,
+  onSubmit,
+  onCancel
 }) => {
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   const allUsers = useAppSelector(selectAllUsers)
   const { data: selectedUsersData, isSuccess } = useGetUserByHomeIdQuery({
     homeId: homeInfo.id
   })
+  const isNoItemSelected = !selectedItems.length
 
   const [updateUserIds, { isLoading }] = useUpdateUsersMutation()
   useEffect(() => {
@@ -38,14 +43,18 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
 
   const handleSubmit = async () => {
     try {
+      if (isNoItemSelected) return
       await updateUserIds({
         homeId: homeInfo.id,
         userIds: selectedItems
       }).unwrap()
-      console.log("Users updated successfully")
+      setTimeout(onSubmit, 200)
     } catch (error) {
       console.log("Error updating users", error)
     }
+  }
+  const handleCancel = () => {
+    onCancel()
   }
 
   return (
@@ -53,6 +62,10 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
       <h2 className="text-xl font-semibold mb-4">
         Modify Users for: {homeInfo.street_address}
       </h2>
+      {isNoItemSelected && (
+        <p className="text-red-600">* select at least 1 user</p>
+      )}
+
       <ul className="space-y-2">
         {allUsers.map(user => (
           <li key={user.id} className="flex items-center">
@@ -69,11 +82,17 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
       <button
         onClick={handleSubmit}
         className={`mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 ${
-          isLoading ? "opacity-50 cursor-not-allowed" : ""
+          isLoading || isNoItemSelected ? "opacity-50 cursor-not-allowed" : ""
         }`}
-        disabled={isLoading}
+        disabled={isLoading || isNoItemSelected}
       >
-        {isLoading ? "Updating..." : "Submit"}
+        {isLoading ? (isNoItemSelected ? "Submit" : "Updating...") : "Submit"}
+      </button>
+      <button
+        onClick={handleCancel}
+        className="mt-4 ml-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+      >
+        Cancel
       </button>
     </>
   )
