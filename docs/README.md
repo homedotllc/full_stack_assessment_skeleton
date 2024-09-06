@@ -368,34 +368,19 @@ The detailed explaination of this solution can be found in [DB-Solution-README](
     - we do NOT want raw SQL, if none of above works, you can use any ORM you know, but please mention and link to it in the README
 
 ### Solution
-> #### Tech Stack
->  - Language: 
->     - Typescript
->  - Backend node frameworks: 
->     - Express 
-> - Interacting with DB: 
->     - TypeORM
-> #### backend/src/index.ts 
->  - This file sets up the connection with teh database and spins up the express server
->
-> #### backend/src/controller 
->  - `homeController` : 
->     - `findByUser` controller : This controller reads the `userId` , `page` , `limit`s from the query string. It gets all the homes belonging to the `userId` , calculates how many homes should be sent back to the client based on the `page` which is the pageNumber and `limit` ( hardcoded as 50 ). The response contains a list of homes, pagination object that contains the page number ( page ) , limit , total homes that are there in the database ( totalHomes ) , total pages required to read all the homes ( totalPages ).
->     - `updateUsers` controller : This controller reads the homeId from the query string. Then obtains the home and user repository. updates the new users in the home of the specified homeId. Then updates the list of homes that the user has. The response is just a json message.
-> 
-> - `userController` :     
->     - `findUsersByHome` controller : This controller reads the `homeId` from the query string. Then gets a list of users that own the `homeId`. The response is a list of homes ( homes ). 
->     - `findAll` controller : This controller obtains all the users from the database and sends it back to the client in the form of a list of users.
->
-> #### backend/src/routes
->   - `homeRoute` : 
->     - `GET` : `api/home/find-by-user`
->     - `PATCH` : `api/home/update-users`
->   - `userRoute` : 
->     - `GET` : `api/user/find-all`
->     - `GET` : `api/home/find-by-home`
+# Backend Overview
 
-> explain briefly your solution for this problem here
+The backend is built with Express.js with Typescript and TypeORM, managing `User` and `Home` entities in MySQL.
+
+- **Routes**:
+  - **Homes**: `/find-by-user` (GET) to fetch homes by `userId`, `/update-users` (PATCH) to update users associated with a `homeId`.
+  - **Users**: `/find-all` (GET) to list all users, `/find-by-home` (GET) to get users by `homeId`.
+
+- **Controllers**:
+  - **HomeController**: Handles fetching homes for a user and updating users for a home.
+  - **UserController**: Manages user listing and retrieval based on home association.
+
+The detailed explaination of this solution can be found in [Backend-Solution-README](../backend/README.md)
 
 ## Submission Guidelines
 
