@@ -53,8 +53,12 @@
 >```
 >cd backend
 >```
+> - Install node_modules for backend
 >```
->npm run start
+>npm install
+>```
+>```
+>npm start
 >```
 >- Get back into the root directory
 >```
@@ -63,6 +67,9 @@
 >- Start the frontend
 >```
 >cd frontend
+>```
+>```
+>npm install
 >```
 >```
 >npm run dev
