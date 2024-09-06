@@ -25,19 +25,19 @@ const Header = () => {
         aria-label="Global"
         className="flex items-center justify-between p-6 lg:px-8"
       >
-        <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
-            <span className="">Title here</span>
-            {/* <img
+        <a href="#" className="-m-1.5 p-1.5">
+          <span className="">Title here</span>
+          {/* <img
               alt=""
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
               className="h-8 w-auto"
             /> */}
-          </a>
-        </div>
+        </a>
 
-        <div className="flex flex-1 justify-end">
+        <div className="justify-end">
           <Dropdown
+            id="selectUser"
+            label="Select User:"
             onChange={e => dispatch(setUserId(e))}
             options={allUsers.map(({ username, id }) => ({
               label: username,
