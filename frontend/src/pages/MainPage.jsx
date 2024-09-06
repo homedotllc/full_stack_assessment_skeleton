@@ -20,6 +20,7 @@ const MainPage = () => {
   const pageNumber = useSelector((state) => state.home.pageNumber)
   const currentUser = useSelector((state) => state.user.currentUser)
   const totalPages = useSelector((state) => state.home.totalPages)
+  const openModal = useSelector((state) => state.ui.openModal)
 
   // dispatch
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ const MainPage = () => {
   }
 
   return (
-    <div className='w-screen h-screen overflow-y-scroll scroll-smooth flex flex-col justify-start items-center bg-white'>
+    <div className={`w-screen h-screen overflow-y-scroll scroll-smooth flex flex-col justify-start items-center `}>
       
       <div className="w-full h-16 flex flex-row justify-center items-center py-2">
         <div className="w-4/6 h-full flex flex-row justify-end items-center">

@@ -5,7 +5,7 @@ export const fetchAllUsers  = createAsyncThunk(
     'user/fetchAllUsers',
     async () => {
         try{
-            const response = await fetch('http://localhost:3000/user/find-all' , {
+            const response = await fetch('http://localhost:3000/api/user/find-all' , {
                 method : 'GET'
             })
             if (!response.ok) {
@@ -23,7 +23,7 @@ export const fetchUsersByHome = createAsyncThunk(
     'user/fetchUsersByHome',
     async ({homeId}) => {
         try{
-            const response = await fetch(`http://localhost:3000/user/find-by-home?homeId=${homeId}` , {
+            const response = await fetch(`http://localhost:3000/api/user/find-by-home?homeId=${homeId}` , {
                 method : 'GET'
             })
             const responseData = await response.json()
