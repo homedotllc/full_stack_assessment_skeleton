@@ -15,7 +15,7 @@ const findAll = async (req: express.Request, res: express.Response): Promise<exp
     }
 };
 
-const findByHome = async (req: express.Request, res: express.Response): Promise<express.Response> => {
+const findUsersByHome = async (req: express.Request, res: express.Response): Promise<express.Response> => {
     try {
         const homeId = parseInt(req.query.homeId as string, 10);
         if (isNaN(homeId)) {
@@ -40,5 +40,5 @@ const findByHome = async (req: express.Request, res: express.Response): Promise<
 
 export default {
     findAll,
-    findByHome,
+    findUsersByHome,
 };

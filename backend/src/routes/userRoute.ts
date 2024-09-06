@@ -8,6 +8,6 @@ import userController from '../controller/userController';
 router.get('/find-all', userController.findAll);
 
 // get all users by homeId
-router.get('/find-by-home', userController.findByHome);
+router.get('/find-by-home', userController.findUsersByHome);
 
 export default router;
