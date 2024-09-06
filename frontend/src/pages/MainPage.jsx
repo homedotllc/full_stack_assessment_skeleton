@@ -12,7 +12,11 @@ const MainPage = () => {
 
   // useSelectors
   const userList = useSelector((state) => state.user.userList, shallowEqual);
-  const homesList = useSelector((state) => state.home.homesList, shallowEqual);
+  const homesList = useSelector((state) => state.home.homesList.map((home) => ({
+    ...home,
+    list_price : parseFloat(home.list_price),
+    sqft : parseFloat(home.sqft)
+  })), shallowEqual);
   const pageNumber = useSelector((state) => state.home.pageNumber)
   const currentUser = useSelector((state) => state.user.currentUser)
   const totalPages = useSelector((state) => state.home.totalPages)
