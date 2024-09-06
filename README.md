@@ -135,7 +135,7 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-### Backend API Solution Overview
+### Database Solution Overview
 
 The solution focuses on optimizing the database by applying **normalization** to eliminate redundancy, improve data integrity, and enhance performance.
 
