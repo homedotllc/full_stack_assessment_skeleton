@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/app/hooks"
 import Card from "@/components/Card"
 import Dialog from "@/components/Dialog"
+import Pagination from "@/components/Pagination"
 import { useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
@@ -11,13 +12,17 @@ import { selectUserId } from "./userHomeSlice"
 
 export const UserHome = () => {
   const userId = useAppSelector(selectUserId)
-  const { data, isError, isLoading, isSuccess } = useGetHomeByUserIdQuery({
-    userId
-  })
+
   const [selectedHomeInfo, setSelectedHomeInfo] = useState<HomeInfo | null>(
     null
   )
+  const [currentPage, setCurrentPage] = useState(1)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const { data, isError, isLoading, isSuccess } = useGetHomeByUserIdQuery({
+    userId,
+    page: currentPage
+  })
 
   const handleOpenDialog = (homeInfo: HomeInfo) => {
     setSelectedHomeInfo(homeInfo)
@@ -27,6 +32,15 @@ export const UserHome = () => {
   const handleCloseDialog = () => {
     setIsDialogOpen(false)
     setSelectedHomeInfo(null)
+  }
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(previous => (previous > 1 ? previous - 1 : 1))
+    }
+  }
+  const handleNextPage = () => {
+    setCurrentPage(previous => previous + 1)
   }
 
   return (
@@ -130,6 +144,13 @@ export const UserHome = () => {
               </div>
             </Card>
           ))}
+      </div>
+      <div className="mt-4">
+        <Pagination
+          page={currentPage}
+          onNext={handleNextPage}
+          onPrevious={handlePreviousPage}
+        />
       </div>
     </>
   )
