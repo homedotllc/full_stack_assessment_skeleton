@@ -1,39 +1,37 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const fetchHomesByUser = createAsyncThunk(
-    'home/fetchHomeByUser',
+export const fetchHomesByUser = createAsyncThunk(
+    'home/fetchHomesByUser',
     async (payload) => {
-        const response = await fetch(`http://localhost:3000/home/find-by-user?userId=${payload.userId}&page=${payload.page}&limit=${payload.limit}` , {
-            method : 'GET'
-        })
-        const responseData = await response.json()
-        return responseData
+        try{
+            console.log('inside fetchHomesByUser')
+            console.log('payload : ' , payload)
+            const response = await fetch(`http://localhost:3000/home/find-by-user?userId=${payload.userId}&page=${payload.page}&limit=${payload.limit}` , {
+                method : 'GET'
+            })
+
+            const responseData = await response.json()
+            return responseData.data
+        }catch(err){
+            console.log('err in fetchHomesByUser : ' , err)
+        }       
     }
 )
 
-const fetchUsersByHome = createAsyncThunk(
-    'home/fetchUsersByHome',  
-    async (payload) => {
-        const response = await fetch(`http://localhost:3000/home/get-users-by-home/${payload.homeId}` , {
-            method : 'GET'
-        })
-        const responseData = await response.json()
-        return responseData
-    }
-)
 
-const updateUsers = createAsyncThunk(
+export const updateUsers = createAsyncThunk(
     'home/updateUsers' , 
     async (payload) => {
-        const response = await fetch(`http://localhost:3000/home/${payload.userId}/update-users` , {
+        console.log('payload : ' , payload)
+        const response = await fetch(`http://localhost:3000/home/update-users?homeId=${payload.homeId}` , {
             method : 'PATCH',
-            body : JSON.stringify(payload.userIdList)
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({users : payload.users})
         })
         const responseData = await response.json()
+        console.log('responseData : ' , responseData)
         return responseData
     }
 )
-
-export default {
-    fetchHomesByUser , fetchUsersByHome , updateUsers
-}
