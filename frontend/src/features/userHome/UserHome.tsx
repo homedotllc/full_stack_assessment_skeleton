@@ -144,6 +144,7 @@ export const UserHome = () => {
       <div className="mt-4">
         <Pagination
           page={currentPage}
+          totalPages={data?.totalPages || 1}
           onNext={handleNextPage}
           onPrevious={handlePreviousPage}
         />
