@@ -6,6 +6,16 @@ This project involves building a backend API to enable a web application to inte
 
 ---
 
+### Steps to run -
+
+```
+cd backend
+npm i
+npm run dev
+```
+
+---
+
 ### Project Structure
 
 ```

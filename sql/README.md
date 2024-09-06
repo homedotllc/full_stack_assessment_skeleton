@@ -1,5 +1,11 @@
 # Database Normalization and Solution
 
+### To Run -
+
+```
+docker-compose -f docker-compose.final.yml up
+```
+
 ## Solution Design
 
 ### 1. **User Table**

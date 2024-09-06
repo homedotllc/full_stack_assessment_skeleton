@@ -6,6 +6,16 @@ This project implements a simple Single Page Application (SPA) using **React** t
 
 ---
 
+### Steps to run -
+
+```
+cd frontend
+npm i
+npm run dev
+```
+
+---
+
 ### **Key Features**
 
 1. **Homes for User Page**
