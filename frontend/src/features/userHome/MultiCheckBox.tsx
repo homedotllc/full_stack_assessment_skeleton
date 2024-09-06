@@ -39,11 +39,11 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
 
   const handleSubmit = async () => {
     try {
+      if (isNoItemSelected) return
       await updateUserIds({
         homeId: homeInfo.id,
         userIds: selectedItems
       }).unwrap()
-      console.log("Users updated successfully")
     } catch (error) {
       console.log("Error updating users", error)
     }
