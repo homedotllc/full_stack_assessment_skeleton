@@ -5,10 +5,12 @@ import { Home } from '../entities/Home';
 
 
 const findAll = async (req: express.Request, res: express.Response): Promise<express.Response> => {
+    console.log('inside find all')
     try {
         const userRepository = AppDataSource.getRepository(User);
         const users = await userRepository.find();
-        return res.json(users);
+        console.log('users : ' , users)
+        return res.status(200).json({data : users});
     } catch (error) {
         console.error('Error fetching users:', error);
         return res.status(500).json({ message: 'Error fetching users' });
@@ -17,7 +19,8 @@ const findAll = async (req: express.Request, res: express.Response): Promise<exp
 
 const findByHome = async (req: express.Request, res: express.Response): Promise<express.Response> => {
     try {
-        const homeId = parseInt(req.params.homeId, 10);
+        // console.log('homeId : ' , req.query.homeId)
+        const homeId = parseInt(req.query.homeId as string, 10);
         if (isNaN(homeId)) {
             return res.status(400).json({ message: 'Invalid homeId' });
         }
@@ -29,10 +32,10 @@ const findByHome = async (req: express.Request, res: express.Response): Promise<
         });
 
         if (!home) {
-            return res.status(404).json({ message: 'Home not found' });
+            return res.status(200).json({ message: 'Home not found' });
         }
-
-        return res.json(home); 
+        // console.log('home : ' , home)
+        return res.json({data : home}); 
     } catch (error) {
         console.error('Error fetching users by home:', error);
         return res.status(500).json({ message: 'Error fetching users by home' });

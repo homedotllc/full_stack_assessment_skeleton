@@ -6,13 +6,17 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, type : 'varchar' })     // User is identified by username ( unique )
+  @Column({ unique: true, type: 'varchar', length: 255 })
   username: string;
 
-  @Column({type : 'varchar'})
+  @Column({ type: 'varchar', length: 255 })
   email: string;
 
-  @ManyToMany(() => Home , home => home.users , { cascade : true })
-  @JoinTable()
-  homes : Home[]
+  @ManyToMany(() => Home, home => home.users)
+  @JoinTable({
+    name: 'user_home_relation', // This is the name of the join table
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'home_id', referencedColumnName: 'id' }
+  })
+  homes: Home[];
 }
