@@ -39,10 +39,13 @@ const Header = () => {
             id="selectUser"
             label="Select User:"
             onChange={e => dispatch(setUserId(e))}
-            options={allUsers.map(({ username, id }) => ({
-              label: username,
-              value: id
-            }))}
+            options={[
+              { label: "Select User", value: null },
+              ...allUsers.map(({ username, id }) => ({
+                label: username,
+                value: id
+              }))
+            ]}
           />
         </div>
       </nav>
