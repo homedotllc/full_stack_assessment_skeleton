@@ -18,7 +18,6 @@ const homeSlice = createSlice({
         },
         setCurrentHome : (state , action) => {
             state.currentHome = action.payload.homeItem
-            console.log('state.currentHome : ' , state.currentHome)
         },
         incrementPageNumber : (state) => {
             state.pageNumber = state.pageNumber + 1
@@ -35,14 +34,11 @@ const homeSlice = createSlice({
             state.homesLoading = false
             state.homesList = action.payload.homes
             state.totalPages = action.payload.pagination.totalPages
-            console.log('state.homesList : ' , state.homesList)
         })
         .addCase(fetchHomesByUser.pending , (state) => {
             state.homesLoading = true
         })
-        .addCase(fetchHomesByUser.rejected , (state , action) => {
-            console.log('fetchHomesByUser rejected : ')
-            console.log('action payload : ' , action.payload)
+        .addCase(fetchHomesByUser.rejected , (state) => {
             state.pageNumber = state.pageNumber - 1
         })
         .addCase(updateUsers.fulfilled , () => {

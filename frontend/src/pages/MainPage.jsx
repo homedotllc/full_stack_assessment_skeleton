@@ -8,20 +8,24 @@ import { decrementPageNumber, incrementPageNumber, resetHomesList } from "../fea
 import { setCurrentUser } from "../features/user/userSlice";
 
 const MainPage = () => {
-  const dispatch = useDispatch();
+  // useStates
+
+  // useSelectors
   const userList = useSelector((state) => state.user.userList, shallowEqual);
   const homesList = useSelector((state) => state.home.homesList, shallowEqual);
-
   const pageNumber = useSelector((state) => state.home.pageNumber)
-
-  useEffect(() => {
-    console.log('Dispatching fetchAllUsers');
-    dispatch(fetchAllUsers());
-  }, [dispatch , homesList]);   
-
   const currentUser = useSelector((state) => state.user.currentUser)
   const totalPages = useSelector((state) => state.home.totalPages)
 
+  // dispatch
+  const dispatch = useDispatch();
+  
+  // hooks
+  useEffect(() => {
+    dispatch(fetchAllUsers());
+  }, [dispatch , homesList]);   
+
+  // functions
   const handleSelectHandler = (e) => {
     const option = e.target.value
     if(option != 'None'){
@@ -30,7 +34,7 @@ const MainPage = () => {
       dispatch(fetchHomesByUser({userId : user.id , page : pageNumber , limit : '50'}))
     }else{
       dispatch(resetHomesList())
-      console.log('Noting to show')
+      console.log('Nothing to show')
     }
   }
 

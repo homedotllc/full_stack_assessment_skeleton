@@ -10,7 +10,6 @@ const uiSlice = createSlice({
     reducers : {
         toggleModalState : (state , action) => {
             state.openModal = action.payload.openModal
-            console.log(state.openModal)
         }
     }
 })

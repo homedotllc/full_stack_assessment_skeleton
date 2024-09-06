@@ -5,12 +5,8 @@ import { Home } from '../entities/Home';
 import { In } from 'typeorm';
 
 const findByUser = async (req: Request, res: Response): Promise<Response> => {
-    console.log('Inside findByUser function');
     try {
-        console.log('Request query:', req.query);
-
         const userId = parseInt(req.query.userId as string, 10);
-        console.log('User ID:', userId);
 
         if (isNaN(userId)) {
             console.log('Invalid userId');
@@ -21,14 +17,10 @@ const findByUser = async (req: Request, res: Response): Promise<Response> => {
         const limit = parseInt(req.query.limit as string, 10) || 50;
         const skip = (page - 1) * limit;
 
-        console.log('Page:', page);
-        console.log('Limit:', limit);
-        console.log('Skip:', skip);
-
         const userRepository = AppDataSource.getRepository(User);
         const user = await userRepository.findOne({
             where: { id: userId },
-            relations: ['homes'] // Ensure that related homes are fetched
+            relations: ['homes'] // Ensuring that related homes are fetched
         });
 
         if (!user) {
@@ -38,9 +30,6 @@ const findByUser = async (req: Request, res: Response): Promise<Response> => {
 
         const homes = user.homes.slice(skip, skip + limit);
         const totalHomes = user.homes.length;
-
-        console.log('Homes:', JSON.stringify(homes, null, 2));
-        console.log('Total Homes:', totalHomes);
 
         if (homes.length === 0) {
             console.log('No homes found');
@@ -71,7 +60,6 @@ const getUsersByHome = async (req: express.Request, res: express.Response): Prom
     try {
         const {homeId : homeIdString} = req.params
         const homeId = parseInt(homeIdString , 10)
-        console.log('homeId : ' , homeId)
         if (isNaN(homeId)) {
             return res.status(400).json({ message: 'Invalid homeId' });
         }
@@ -95,12 +83,8 @@ const getUsersByHome = async (req: express.Request, res: express.Response): Prom
 
 const updateUsers = async (req: express.Request, res: express.Response): Promise<express.Response> => {
     const homeId = parseInt(req.query.homeId as string, 10)
-    console.log('homeId : ' , homeId);
-    console.log('users : ' , req.body);
-    console.log('users : ' , req.body?.users);
-
     try {
-        const usernames: string[] = req.body.users; // Use usernames from request body
+        const usernames: string[] = req.body.users; 
         if (!homeId || !Array.isArray(usernames) || usernames.length === 0) {
             return res.status(400).json({ message: 'Invalid input' });
         }
@@ -120,10 +104,10 @@ const updateUsers = async (req: express.Request, res: express.Response): Promise
 
         // Find users by usernames
         const users = await userRepository.find({
-            where: { username: In(usernames) } // Use the In operator to find multiple users
+            where: { username: In(usernames) } 
         });
 
-        // Ensure that all usernames correspond to users found
+        // Ensuring that all usernames correspond to users found
         if (users.length !== usernames.length) {
             return res.status(404).json({ message: 'Some users not found' });
         }

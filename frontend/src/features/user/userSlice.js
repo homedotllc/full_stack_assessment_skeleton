@@ -20,20 +20,15 @@ const userSlice = createSlice({
     extraReducers : (builder) => {
         builder
         .addCase(fetchAllUsers.fulfilled , (state , action) => {
-            console.log('action ; ',  action.payload)
             state.userList = action.payload 
         })
         .addCase(fetchAllUsers.rejected, (state ) => {
-            console.log('fetchAllUsers rejected')
             state.userList = []
         })
         .addCase(fetchUsersByHome.fulfilled , (state , action) => {
-            console.log('fetchAllUsers fulfilled')
             state.usersByHomeList = action.payload
-            console.log('usersByHomeList : ' , state.usersByHomeList)
         })
         .addCase(fetchUsersByHome.rejected , (state) => {
-            console.log('fetchAllUsers rejected')
             state.usersByHomeList = []
         })
     }
