@@ -21,13 +21,13 @@
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/index.ts",
     "build": "tsup",
-    "start": "node build/index.js"
+    "start": "node dist/index.js"
   },
   "tsup": {
     "entry": [
-      "src/index.ts"
+      "src"
     ],
-    "outDir": "build",
+    "outDir": "dist",
     "splitting": false,
     "sourcemap": true,
     "clean": true
