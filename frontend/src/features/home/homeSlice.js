@@ -26,6 +26,9 @@ const homeSlice = createSlice({
             if(state.pageNumber > 1){
                 state.pageNumber = state.pageNumber - 1
             }
+        },
+        resetPageNumber : (state) => {
+            state.pageNumber = 1
         }
     },
     extraReducers : (builder) => {
@@ -47,5 +50,5 @@ const homeSlice = createSlice({
     }
 })
 
-export const {resetHomesList , setCurrentHome , incrementPageNumber , decrementPageNumber} = homeSlice.actions
+export const {resetHomesList , setCurrentHome , incrementPageNumber , decrementPageNumber , resetPageNumber} = homeSlice.actions
 export default homeSlice.reducer
