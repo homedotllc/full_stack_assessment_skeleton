@@ -263,52 +263,31 @@ The detailed explaination of this solution can be found in [DB-Solution-README](
 > even if you can do state-management without Redux, you still must use Redux for the solution, (remember the idea is to showcase the skills)
 
 ### Solution
-> #### Tech Stack used
-> - Language: 
->   - Javascript
-> - JS frameworks : 
->    - Vite
-> - CSS : 
->   - Tailwind CSS
-> - State Management : 
->   - Redux Toolkit
-> - Data fetching : 
->   - `create Async Thunk` from redux toolkit (why ?)
->     - `create Async Thunk (cAT)` is a generalized building bloock, `RTK Query` is a specialized single purpose tool. `RTK Query` is built on top of `cAT` , so `cAT` is a low-level API for `RTK Query` which has more flexibility. That being said for this use case of the assignment, the same functionalities can be implemented with both. `cAT Documentation : https://redux-toolkit.js.org/usage/usage-with-typescript#createasyncthunk`
->  - Skeletons/Spinners : 
->     - No library used. Custom made
-> #### Video 
->
-> #### frontend/src/app
-> - This folder contains the global `store` which contains all the reducers from `features` folder - user , home and ui.
-> 
-> #### frontend/src/features
-> - The features folder contains the slices and thunks required for global state management and data-fetchinfg.
->   - features/home
->     - Contains `homeSlice` which stores all the data related to home.
->     - Contains `homeThunks` which are async functions for data-fetchinng. The response states like - fulfilled, rejected, pending are handled in `homeSlice`.
->     - Thunks : 
->       - `fetchHomesByUser` : This thunk fetches all the homes which belong to a user `/api/home/find-by-user` . The output of this is the home cards that are dispalyed on the webapge.
->       - `updateUsers` : This thunk calls the `api/home/update-users` endpoint to update the home data with a new set of users. This thunk is dispatched when the `Save` button is clicked in the Edit User modal.
->   - features/ui
->     - Contains `uiSlice` which stores the data related to the UI/entire App. Why not use useState for this instad of a reducer ? This is because there are more than one files that use the  ui data, sharing the useState variables to other components is complicated. It is easier and hassle-free to store all the ui/app related data into a single state , we will call it the uiState, which can be easily used by multiple components.
->   - features/user
->     - Contains `userSlice` which stores all the data related to user.
->     - Contains `userThunks` which are async functions for data-fetching. The response states are handled in `userSlice`.
->     - Thunks : 
->       - `fetchAllUsers`  : This thunk fetches all the users from the endpoint `api/user/find-all`. The response from this thunk is displayed on the top right select box which shows a list of users on the webpage.
->       - `fetchUsersByHome` : This thunk fetches all users that own a specific home from the endpoint `api/user/find-by-home` . The response of this is displayed as a list of users when the the `Edit Users` button is clicked.
-> 
-> #### frontend/src/components
-> - This folder contains all the UI components
->
-> #### frontend/src/pages
-> - Contains a single page - `MainPage.jsx`
-> 
-> #### Check list
-> - [X] homes for user page
-> - [X] edit user functionality
-> - [X] handle data-fetching properly
+# Frontend Solution Overview
+
+The frontend uses:
+
+- **Vite**: For fast development and optimized production builds.
+- **Tailwind CSS**: For efficient, utility-first styling.
+- **Redux Toolkit**: For state management and data fetching with `createAsyncThunk` for controlled state updates and async operations.
+
+**Structure**:
+- **Global Store**: Manages state from `user`, `home`, and `ui` features.
+- **Features**: 
+  - **`home`**: Handles homes data and async actions.
+  - **`user`**: Manages user data and async actions.
+  - **`ui`**: Centralizes UI state for easier management.
+
+**Components**: Houses UI components and the main page (`MainPage.jsx`).
+
+**Key Functions**:
+- Fetch homes and users efficiently.
+- Update user-home associations with custom logic.
+
+**Checklist**:
+- Homes page, edit user functionality, and data-fetching are implemented and tested.
+
+The detailed solution of frontend solution can be found in [Frontend-Solution-README](../frontend/README.md)
 
 ## 3. Backend API development on Node
 
