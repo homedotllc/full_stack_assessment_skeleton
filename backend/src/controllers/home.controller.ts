@@ -10,7 +10,7 @@ export class HomeController {
     const { userIds } = req.body
     const homeId = parseInt(req.body.homeId)
 
-    if (!homeId || !userIds || !Array.isArray(userIds)) {
+    if (!homeId || !userIds || !Array.isArray(userIds) || !userIds.length) {
       return res.status(400).json({ error: "Invalid input" })
     }
 
