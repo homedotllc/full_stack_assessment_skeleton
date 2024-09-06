@@ -47,15 +47,11 @@ export const UserHome = () => {
     <>
       <Dialog isOpen={isDialogOpen} onClose={handleCloseDialog}>
         {selectedHomeInfo && (
-          <>
-            <MultiSelectCheckbox homeInfo={selectedHomeInfo} />
-            <button
-              onClick={handleCloseDialog}
-              className="mt-4 ml-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-          </>
+          <MultiSelectCheckbox
+            onSubmit={handleCloseDialog}
+            onCancel={handleCloseDialog}
+            homeInfo={selectedHomeInfo}
+          />
         )}
       </Dialog>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-4 xl:grid-cols-4 2xl:gap-7.5">

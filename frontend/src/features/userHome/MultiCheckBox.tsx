@@ -10,10 +10,14 @@ import { selectAllUsers } from "./userHomeSlice"
 
 interface MultiSelectCheckboxProps {
   homeInfo: HomeInfo
+  onSubmit: () => void
+  onCancel: () => void
 }
 
 const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
-  homeInfo
+  homeInfo,
+  onSubmit,
+  onCancel
 }) => {
   const [selectedItems, setSelectedItems] = useState<number[]>([])
   const allUsers = useAppSelector(selectAllUsers)
@@ -44,9 +48,13 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
         homeId: homeInfo.id,
         userIds: selectedItems
       }).unwrap()
+      setTimeout(onSubmit, 200)
     } catch (error) {
       console.log("Error updating users", error)
     }
+  }
+  const handleCancel = () => {
+    onCancel()
   }
 
   return (
@@ -79,6 +87,12 @@ const MultiSelectCheckbox: React.FC<MultiSelectCheckboxProps> = ({
         disabled={isLoading || isNoItemSelected}
       >
         {isLoading ? (isNoItemSelected ? "Submit" : "Updating...") : "Submit"}
+      </button>
+      <button
+        onClick={handleCancel}
+        className="mt-4 ml-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+      >
+        Cancel
       </button>
     </>
   )
