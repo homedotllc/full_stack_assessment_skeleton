@@ -1,3 +1,6 @@
+# Video Demonstration 
+[Video Demonstration](../assets/screen-capture.mp4)
+
 # Introduction - how to read this doc
 
 - This exercise is designed to test basic skills in 3 core areas:
@@ -38,9 +41,36 @@
 - fork this repository, you'll be committing all your changes to the forked repo
 - clone the fork locally to develop
 
-```bash
-git clone https://github.com/<username>/full_stack_assessment_skeleton.git
-```
+### Solution
+>```
+>git clone https://github.com/<username>/full_stack_assessment_skeleton.git
+>```
+>- Inside the root directory, start the docker container 
+>```
+>docker-compose -f docker-compose.final.yml up --build -d
+>```
+>- Spin up the backend server ( Note: No need to add the .env file/ENV variables, the .env >file is already commited )
+>```
+>cd backend
+>```
+>```
+>npm run start
+>```
+>- Get back into the root directory
+>```
+>cd ..
+>```
+>- Start the frontend
+>```
+>cd frontend
+>```
+>```
+>npm run dev
+>```
+>- Now your React application must be running on ```http://localhost:5173/``` and backend on ```localhost:3000```
+>
+
+
 
 > [!NOTE]
 > throughout the readme, we'll be working from within the root directory (full_stack_assessment_skeleton/) of the repo, unless otherwise stated
@@ -49,7 +79,7 @@ git clone https://github.com/<username>/full_stack_assessment_skeleton.git
 - this db instance has some data that will be needed for the exercise, included in it
 
 ```bash
-docker-compose -f docker-compose.initial.yml up --build -d
+docker-compose -f docker-compose.final.yml up --build -d
 ```
 
 - the containerized db listens on `localhost:3306`
@@ -127,9 +157,27 @@ docker-compose -f docker-compose.initial.yml up --build -d
   - so you must **NOT** use Entity first development, where you write your ORM entities and generate SQL migration scripts
   - instead you directly write SQL script, that makes all the changes you want to the DB
 
-### solution
+### Solution
+>#### Thought Process
+>- The initial problem involves a denormalized user_home table that stores user information (username, email) and home attributes (street_address, state, zip, sqft, beds, baths, list_price). The relationship between users and homes is a many-to-many relationship. Each user can be related to multiple homes, and each home can be related to multiple users.
+> - We will refactor the database schema into a normalized structure which will consist of 3 tables: 
+>   - user : To store the user-related information
+>   - home : To stre the home-related information
+>   - user_home_relation : To represent the many-to-many relationship between users and homes
+> - I have ensured the relationship between the 2 tables using **foreign keys** that reference the primary key of the user and home tables.
+> - **Creating `user` table** : 
+>   - I have extracted the username and email from the `user_home` table. In this table ,each user will be uniquely identified by the username.
+>   - Then I have assigned an auto-incrementing primary key `id` to the `user` table.
+> - **Creating `home` table** :
+>   - I have extracted the home-related columns as mentioned above from the `user_home` table. In this table, each home is uniquely identified by the `street_name`.
+>   - Then I have assigned an auto-incrementing primary key `id` to the `home` table.
+>  - **Creating `user_home_relation` table** : 
+>   - This table consists of 2 foreign keys, one referencing the `user.id` column as `user_id` and other referencing the  `home.id` column as `home_id`.
+>   - And then the combination of `user_id` and `home_id` will act as a composite primary key for this table.
+>  - I have then createed the entities using `TypeORM` for the tables in the final script.
+>  - The final SQL script is present in `sql` folder by the name : `99_final_db_dump.sql`
 
-> explain briefly your solution for this problem here
+
 
 ## 2. React SPA
 
@@ -218,9 +266,53 @@ docker-compose -f docker-compose.initial.yml up --build -d
 > [!IMPORTANT]
 > even if you can do state-management without Redux, you still must use Redux for the solution, (remember the idea is to showcase the skills)
 
-### solution
-
-> explain briefly your solution for this problem here
+### Solution
+> #### Tech Stack used
+> - Language: 
+>   - Javascript
+> - JS frameworks : 
+>    - Vite
+> - CSS : 
+>   - Tailwind CSS
+> - State Management : 
+>   - Redux Toolkit
+> - Data fetching : 
+>   - `create Async Thunk` from redux toolkit (why ?)
+>     - `create Async Thunk (cAT)` is a generalized building bloock, `RTK Query` is a specialized single purpose tool. `RTK Query` is built on top of `cAT` , so `cAT` is a low-level API for `RTK Query` which has more flexibility. That being said for this use case of the assignment, the same functionalities can be implemented with both. `cAT Documentation : https://redux-toolkit.js.org/usage/usage-with-typescript#createasyncthunk`
+>  - Skeletons/Spinners : 
+>     - No library used. Custom made
+> #### Video 
+>
+> #### frontend/src/app
+> - This folder contains the global `store` which contains all the reducers from `features` folder - user , home and ui.
+> 
+> #### frontend/src/features
+> - The features folder contains the slices and thunks required for global state management and data-fetchinfg.
+>   - features/home
+>     - Contains `homeSlice` which stores all the data related to home.
+>     - Contains `homeThunks` which are async functions for data-fetchinng. The response states like - fulfilled, rejected, pending are handled in `homeSlice`.
+>     - Thunks : 
+>       - `fetchHomesByUser` : This thunk fetches all the homes which belong to a user `/api/home/find-by-user` . The output of this is the home cards that are dispalyed on the webapge.
+>       - `updateUsers` : This thunk calls the `api/home/update-users` endpoint to update the home data with a new set of users. This thunk is dispatched when the `Save` button is clicked in the Edit User modal.
+>   - features/ui
+>     - Contains `uiSlice` which stores the data related to the UI/entire App. Why not use useState for this instad of a reducer ? This is because there are more than one files that use the  ui data, sharing the useState variables to other components is complicated. It is easier and hassle-free to store all the ui/app related data into a single state , we will call it the uiState, which can be easily used by multiple components.
+>   - features/user
+>     - Contains `userSlice` which stores all the data related to user.
+>     - Contains `userThunks` which are async functions for data-fetching. The response states are handled in `userSlice`.
+>     - Thunks : 
+>       - `fetchAllUsers`  : This thunk fetches all the users from the endpoint `api/user/find-all`. The response from this thunk is displayed on the top right select box which shows a list of users on the webpage.
+>       - `fetchUsersByHome` : This thunk fetches all users that own a specific home from the endpoint `api/user/find-by-home` . The response of this is displayed as a list of users when the the `Edit Users` button is clicked.
+> 
+> #### frontend/src/components
+> - This folder contains all the UI components
+>
+> #### frontend/src/pages
+> - Contains a single page - `MainPage.jsx`
+> 
+> #### Check list
+> - [X] homes for user page
+> - [X] edit user functionality
+> - [X] handle data-fetching properly
 
 ## 3. Backend API development on Node
 
@@ -279,7 +371,33 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
     - we do NOT want raw SQL, if none of above works, you can use any ORM you know, but please mention and link to it in the README
 
-### solution
+### Solution
+> #### Tech Stack
+>  - Language: 
+>     - Typescript
+>  - Backend node frameworks: 
+>     - Express 
+> - Interacting with DB: 
+>     - TypeORM
+> #### backend/src/index.ts 
+>  - This file sets up the connection with teh database and spins up the express server
+>
+> #### backend/src/controller 
+>  - `homeController` : 
+>     - `findByUser` controller : This controller reads the `userId` , `page` , `limit`s from the query string. It gets all the homes belonging to the `userId` , calculates how many homes should be sent back to the client based on the `page` which is the pageNumber and `limit` ( hardcoded as 50 ). The response contains a list of homes, pagination object that contains the page number ( page ) , limit , total homes that are there in the database ( totalHomes ) , total pages required to read all the homes ( totalPages ).
+>     - `updateUsers` controller : This controller reads the homeId from the query string. Then obtains the home and user repository. updates the new users in the home of the specified homeId. Then updates the list of homes that the user has. The response is just a json message.
+> 
+> - `userController` :     
+>     - `findUsersByHome` controller : This controller reads the `homeId` from the query string. Then gets a list of users that own the `homeId`. The response is a list of homes ( homes ). 
+>     - `findAll` controller : This controller obtains all the users from the database and sends it back to the client in the form of a list of users.
+>
+> #### backend/src/routes
+>   - `homeRoute` : 
+>     - `GET` : `api/home/find-by-user`
+>     - `PATCH` : `api/home/update-users`
+>   - `userRoute` : 
+>     - `GET` : `api/user/find-all`
+>     - `GET` : `api/home/find-by-home`
 
 > explain briefly your solution for this problem here
 
