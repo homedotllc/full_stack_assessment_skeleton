@@ -41,6 +41,7 @@ export const userHomeApiSlice = createApi({
     getUserByHomeId: build.query<AllUsersResponse, FindUserByHomeIdRequest>({
       query: ({ homeId }) => `user/find-by-home/${homeId}`,
       providesTags: (result, error, { homeId }) => [
+        { type: "User", id: "LIST" },
         { type: "User", id: homeId }
       ]
     }),
@@ -50,7 +51,10 @@ export const userHomeApiSlice = createApi({
         method: "POST",
         body: payload
       }),
-      invalidatesTags: [{ type: "Home", id: "LIST" }]
+      invalidatesTags: [
+        { type: "Home", id: "LIST" },
+        { type: "User", id: "LIST" }
+      ]
     })
   })
 })
