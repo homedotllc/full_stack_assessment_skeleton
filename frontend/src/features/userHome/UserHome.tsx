@@ -1,7 +1,11 @@
 import { useAppSelector } from "@/app/hooks"
 import Card from "@/components/Card"
+import Dialog from "@/components/Dialog"
+import { useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import "react-loading-skeleton/dist/skeleton.css"
+import MultiSelectCheckbox from "./MultiCheckBox"
+import { HomeInfo } from "./types"
 import { useGetHomeByUserIdQuery } from "./userHomeApiSlice"
 import { selectUserId } from "./userHomeSlice"
 
@@ -10,11 +14,36 @@ export const UserHome = () => {
   const { data, isError, isLoading, isSuccess } = useGetHomeByUserIdQuery({
     userId
   })
+  const [selectedHomeInfo, setSelectedHomeInfo] = useState<HomeInfo | null>(
+    null
+  )
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const handleOpenDialog = (homeInfo: HomeInfo) => {
+    setSelectedHomeInfo(homeInfo)
+    setIsDialogOpen(true)
+  }
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false)
+    setSelectedHomeInfo(null)
+  }
 
   return (
     <>
-      {/* <h3>Select the Quantity of Quotes to Fetch:</h3> */}
-
+      <Dialog isOpen={isDialogOpen} onClose={handleCloseDialog}>
+        {selectedHomeInfo && (
+          <>
+            <MultiSelectCheckbox homeInfo={selectedHomeInfo} />
+            <button
+              onClick={handleCloseDialog}
+              className="mt-4 ml-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+            >
+              Cancel
+            </button>
+          </>
+        )}
+      </Dialog>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-4 xl:grid-cols-4 2xl:gap-7.5">
         {isError && (
           <div>
@@ -92,8 +121,11 @@ export const UserHome = () => {
                   </div>
                 </div>
 
-                <button className="mt-6 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200">
-                  View Details
+                <button
+                  className="mt-6 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
+                  onClick={() => handleOpenDialog(item)}
+                >
+                  Edit Users
                 </button>
               </div>
             </Card>
