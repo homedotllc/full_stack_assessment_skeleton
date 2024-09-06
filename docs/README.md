@@ -1,5 +1,5 @@
 # Video Demonstration 
-[![Video Demonstration](../assets/thumbnail.png)](../assets/screen-capture.mp4)
+![Video Demonstration](../assets/screen-capture.gif)
 
 # Introduction - how to read this doc
 
