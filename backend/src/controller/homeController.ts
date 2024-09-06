@@ -56,31 +56,6 @@ const findByUser = async (req: Request, res: Response): Promise<Response> => {
 };
 
 
-const getUsersByHome = async (req: express.Request, res: express.Response): Promise<express.Response> => {
-    try {
-        const {homeId : homeIdString} = req.params
-        const homeId = parseInt(homeIdString , 10)
-        if (isNaN(homeId)) {
-            return res.status(400).json({ message: 'Invalid homeId' });
-        }
-
-        const homeRepository = AppDataSource.getRepository(Home);
-        const home = await homeRepository.findOne({
-            where: { id: homeId },
-            relations: ['users'],
-        });
-
-        if (!home) {
-            return res.status(404).json({ message: 'Home not found' });
-        }
-
-        return res.json({data : home}); 
-    } catch (error) {
-        console.error('Error finding users by home:', error);
-        return res.status(500).json({ message: 'Error finding users by home' });
-    }
-};
-
 const updateUsers = async (req: express.Request, res: express.Response): Promise<express.Response> => {
     const homeId = parseInt(req.query.homeId as string, 10)
     try {
@@ -127,6 +102,5 @@ const updateUsers = async (req: express.Request, res: express.Response): Promise
 
 export default {
     findByUser,
-    getUsersByHome,
     updateUsers,
 };
