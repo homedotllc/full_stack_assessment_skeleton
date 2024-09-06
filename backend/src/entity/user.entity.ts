@@ -6,10 +6,10 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column("varchar", { length: 255 })
   username: string
 
-  @Column()
+  @Column("varchar", { length: 255 })
   email: string
 
   @OneToMany(() => UserHome, userHome => userHome.user)

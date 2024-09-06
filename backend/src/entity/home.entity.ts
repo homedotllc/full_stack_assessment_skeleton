@@ -6,22 +6,22 @@ export class Home {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column("varchar", { length: 255 })
   street_address: string
 
-  @Column()
+  @Column("varchar", { length: 255 })
   state: string
 
-  @Column()
+  @Column("varchar", { length: 10 })
   zip: string
 
   @Column("decimal", { precision: 10, scale: 2 })
   sqft: number
 
-  @Column()
+  @Column("int")
   beds: number
 
-  @Column()
+  @Column("int")
   baths: number
 
   @Column("decimal", { precision: 15, scale: 2 })

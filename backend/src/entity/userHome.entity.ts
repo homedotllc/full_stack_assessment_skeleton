@@ -4,10 +4,10 @@ import { User } from "./user.entity"
 
 @Entity({ name: "home_user" })
 export class UserHome {
-  @PrimaryColumn({ name: "user_id" })
+  @PrimaryColumn("int", { name: "user_id" })
   userId: number
 
-  @PrimaryColumn({ name: "home_id" })
+  @PrimaryColumn("int", { name: "home_id" })
   homeId: number
 
   @ManyToOne(() => User, user => user.userHomes, { onDelete: "CASCADE" })
