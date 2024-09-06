@@ -42,40 +42,40 @@
 - clone the fork locally to develop
 
 ### Solution
->```
->git clone https://github.com/<username>/full_stack_assessment_skeleton.git
->```
->- Inside the root directory, start the docker container 
->```
->docker-compose -f docker-compose.final.yml up --build -d
->```
->- Spin up the backend server ( Note: No need to add the .env file/ENV variables, the .env >file is already commited )
->```
->cd backend
->```
-> - Install node_modules for backend
->```
->npm install
->```
->```
->npm start
->```
->- Get back into the root directory
->```
->cd ..
->```
->- Start the frontend
->```
->cd frontend
->```
->```
->npm install
->```
->```
->npm run dev
->```
->- Now your React application must be running on ```http://localhost:5173/``` and backend on ```localhost:3000```
->
+```
+git clone https://github.com/<username>/full_stack_assessment_skeleton.git
+```
+- Inside the root directory, start the docker container 
+```
+docker-compose -f docker-compose.final.yml up --build -d
+```
+- Spin up the backend server ( Note: No need to add the .env file/ENV variables, the .env >file is already commited )
+```
+cd backend
+```
+ - Install node_modules for backend
+```
+npm install
+```
+```
+npm start
+```
+- Get back into the root directory
+```
+cd ..
+```
+- Start the frontend
+```
+cd frontend
+```
+```
+npm install
+```
+```
+npm run dev
+```
+- Now your React application must be running on ```http://localhost:5173/``` and backend on ```localhost:3000```
+
 
 
 
@@ -164,25 +164,14 @@ docker-compose -f docker-compose.final.yml up --build -d
   - so you must **NOT** use Entity first development, where you write your ORM entities and generate SQL migration scripts
   - instead you directly write SQL script, that makes all the changes you want to the DB
 
-### Solution
->#### Thought Process
->- The initial problem involves a denormalized user_home table that stores user information (username, email) and home attributes (street_address, state, zip, sqft, beds, baths, list_price). The relationship between users and homes is a many-to-many relationship. Each user can be related to multiple homes, and each home can be related to multiple users.
-> - We will refactor the database schema into a normalized structure which will consist of 3 tables: 
->   - user : To store the user-related information
->   - home : To stre the home-related information
->   - user_home_relation : To represent the many-to-many relationship between users and homes
-> - I have ensured the relationship between the 2 tables using **foreign keys** that reference the primary key of the user and home tables.
-> - **Creating `user` table** : 
->   - I have extracted the username and email from the `user_home` table. In this table ,each user will be uniquely identified by the username.
->   - Then I have assigned an auto-incrementing primary key `id` to the `user` table.
-> - **Creating `home` table** :
->   - I have extracted the home-related columns as mentioned above from the `user_home` table. In this table, each home is uniquely identified by the `street_name`.
->   - Then I have assigned an auto-incrementing primary key `id` to the `home` table.
->  - **Creating `user_home_relation` table** : 
->   - This table consists of 2 foreign keys, one referencing the `user.id` column as `user_id` and other referencing the  `home.id` column as `home_id`.
->   - And then the combination of `user_id` and `home_id` will act as a composite primary key for this table.
->  - I have then createed the entities using `TypeORM` for the tables in the final script.
->  - The final SQL script is present in `sql` folder by the name : `99_final_db_dump.sql`
+### Solution`
+We normalized the `user_home` table, which initially combined user and home data. This denormalized structure was refactored into three separate tables:
+
+User: Stores user information (`username`, `email`) with a unique `id`.
+Home: Stores home details (`street_address`, `state`, `zip`, `sqft`, `beds`, `baths`, `list_price`) with a unique `id`.
+User-Home Relation: Represents the many-to-many relationship between users and homes by linking `user_id` and `home_id`.
+
+The detailed explaination of this solution can be found in [DB-Solution-README](../sql/README.md)
 
 
 
