@@ -88,16 +88,21 @@ frontend/
 
 ### Requests in Thunks
 -  **fetchHomesByUser**
+  
 ![fetchHomesByUser](../docs/images/fetchHomesByUser.png)
 
 - **updateUsers**
+
 ![updateUsers request](../docs/images/updateUsers.png)
 
 - **fetchUsersByHome**
+
 ![fetchUsersByHome](../docs/images/fetchUsersByHome.png)
 
 - **fetchAllUsers**
+
 ![fetchAllUsers](../docs/images//fetchAllUsers.png)
+
 
 ### `frontend/src/components`
 
@@ -112,14 +117,14 @@ frontend/
 
 ## Check List
 
-- [X] Homes for user page
-- [X] Edit user functionality
-- [X] Handle data fetching properly
-- [X] Pagination
+:heavy_check_mark: Homes for user page
+:heavy_check_mark: Edit user functionality
+:heavy_check_mark: Handle data fetching properly
+:heavy_check_mark: Pagination
 
 ## Summary
 
-My frontend solution leverages a modern tech stack with Redux Toolkit for state management and data fetching, Vite for fast development, and Tailwind CSS for styling. The structure is organized to manage global state, handle data fetching efficiently, and provide a clean and maintainable codebase.
+My frontend solution leverages a modern tech stack with Redux Toolkit for state management and data fetching, Vite for fast development, Pagination and Tailwind CSS for styling. The structure is organized to manage global state, handle data fetching efficiently, and provide a clean and maintainable codebase.
 
 ## Additional Features
 

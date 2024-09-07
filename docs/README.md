@@ -289,7 +289,7 @@ The frontend uses:
 - Update user-home associations with custom logic.
 
 **Checklist**:
-- [X] Homes page, edit user functionality, and data-fetching are implemented and tested.
+:heavy_check_mark: Homes page, edit user functionality, and data-fetching are implemented and tested.
 
 The detailed solution of frontend solution can be found in [ReactSPA-Solution-README](../frontend/README.md)
 

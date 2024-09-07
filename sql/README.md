@@ -28,7 +28,8 @@ The initial problem involves a denormalized `user_home` table, which stores both
 > [!NOTE]
 > The original `user_home` table already exists in the database. I haven't altered the the table in any way to store the `user_home_relation` as altering the given data is a bad practice. The information from this table can be used for creating other tables in future.
   
-#### ERD Diagram
+### ERD Diagram
+
 ![ERD Diagram](../docs/images/ERD_Diagram.png)
 
 ### Explanation of Entities
