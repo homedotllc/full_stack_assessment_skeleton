@@ -41,7 +41,7 @@
 - fork this repository, you'll be committing all your changes to the forked repo
 - clone the fork locally to develop
 
-### Solution
+# `Setup Solution`
 - Clone this Repository
 ```
 git clone https://github.com/atharva0300/full_stack_assessment_skeleton
@@ -165,7 +165,7 @@ docker-compose -f docker-compose.final.yml up --build -d
   - so you must **NOT** use Entity first development, where you write your ORM entities and generate SQL migration scripts
   - instead you directly write SQL script, that makes all the changes you want to the DB
 
-### Solution`
+# `Solution`
 I have normalized the `user_home` table, which initially combined user and home data. This denormalized structure is refactored into three separate tables:
 
 - **User**: Stores user information (`username`, `email`) with a unique `id`.
@@ -263,7 +263,7 @@ The detailed explaination of this solution can be found in [DB-Solution-README](
 > [!IMPORTANT]
 > even if you can do state-management without Redux, you still must use Redux for the solution, (remember the idea is to showcase the skills)
 
-## Solution
+# `Solution`
 ### Frontend Solution Overview
 
 The frontend uses:
@@ -350,7 +350,7 @@ The detailed solution of frontend solution can be found in [ReactSPA-Solution-RE
 
     - we do NOT want raw SQL, if none of above works, you can use any ORM you know, but please mention and link to it in the README
 
-### Solution
+# `Solution`
 # Backend Overview
 
 The backend is built with Express.js with Typescript and TypeORM, managing `User` and `Home` entities in MySQL.
