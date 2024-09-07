@@ -16,11 +16,12 @@ This project consists of three parts: a backend, frontend, and database. The dat
 
 1. Clone the repository: **`git clone https://github.com/akmr-me/full_stack_assessment_skeleton.git`**
 2. Navigate to the project directory: **`full_stack_assessment_skeleton`**
-3. Start Data base container: **`docker-compose -f docker-compose.initial.yml up --build -d`**
-4. To Check running container: **`docker ps`**
-5. To access cli of database container: **`docker exec -it  mysql_ctn  /bin/sh`**
-6. Connect to mysql CLI using container shell: **`mysql -u db_user -p`**
-7. Enter the MY_SQL password as mentiond in README.md of docs directory
+3. Switch to branch amresh_solution: **`git checkout amresh_solution`**
+4. Start Data base container: **`docker-compose -f docker-compose.initial.yml up --build -d`**
+5. To Check running container: **`docker ps`**
+6. To access cli of database container: **`docker exec -it  mysql_ctn  /bin/sh`**
+7. Connect to mysql CLI using container shell: **`mysql -u db_user -p`**
+8. Enter the MY_SQL password as mentiond in README.md of docs directory
 
 ### **Backend setup**
 
