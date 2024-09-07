@@ -351,7 +351,7 @@ The detailed solution of frontend solution can be found in [ReactSPA-Solution-RE
     - we do NOT want raw SQL, if none of above works, you can use any ORM you know, but please mention and link to it in the README
 
 # `Solution`
-# Backend Overview
+### Backend Overview
 
 The backend is built with Express.js with Typescript and TypeORM, managing `User` and `Home` entities in MySQL.
 
