@@ -17,7 +17,7 @@ function Home({ selected }: HomeProps) {
     skip: !selected,
   });
 
-  if (isError) return "Something happened...";
+  if (isError) return "Something went wrong!!!";
 
   return (
     <div className="flex flex-wrap gap-5 justify-between">

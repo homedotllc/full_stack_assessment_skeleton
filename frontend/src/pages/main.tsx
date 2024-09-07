@@ -8,8 +8,10 @@ import Skeleton from "react-loading-skeleton";
 function Homepage() {
   const [selected, setSelected] = useState<string>("");
   const {
-    app: { isLoading },
+    app: { isLoading, error },
   } = useSelector((state: RootState) => state);
+
+  if (error) return "Something went wrong!!!";
 
   return (
     <div>

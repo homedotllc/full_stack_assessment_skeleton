@@ -5,6 +5,7 @@ import {
   useSetUserOfHomeMutation,
 } from "../redux/slice/api";
 import { RootState } from "../redux/store";
+import Skeleton from "react-loading-skeleton";
 
 interface UserModalPropsTypes {
   street_address: string;
@@ -37,8 +38,6 @@ function UserModal({ street_address, handleToggleModal }: UserModalPropsTypes) {
     }
   }, [data, users]);
 
-  if (isLoading || isUpdating) return "Loading...";
-  if (isError) return "An error occurred";
   const isAleastCheckedOne = Object.values(checkedUsers).some(Boolean);
 
   const handleCheckboxChange = (value: string) => {
@@ -61,6 +60,8 @@ function UserModal({ street_address, handleToggleModal }: UserModalPropsTypes) {
     handleToggleModal();
   };
 
+  if (isError) return "Something went wrong!!!";
+
   return (
     <div
       className="w-[400px] bg-white p-5 rounded"
@@ -69,26 +70,30 @@ function UserModal({ street_address, handleToggleModal }: UserModalPropsTypes) {
       <h4 className="text-lg font-bold mb-6">
         Modify Users for: {street_address}
       </h4>
-      {users?.map((item) => {
-        return (
-          <div
-            key={item.value}
-            className="flex items-center justify-start mb-2 font-semibold text-lg"
-          >
-            <input
-              type="checkbox"
-              id={item.value}
-              name={item.value}
-              checked={checkedUsers[item.value] || false}
-              onChange={() => handleCheckboxChange(item.value)}
-              className="cursor-pointer"
-            />
-            <label htmlFor={item.value} className="ml-2">
-              {item.label}
-            </label>
-          </div>
-        );
-      })}
+      {isLoading || isUpdating ? (
+        <Skeleton count={10} />
+      ) : (
+        users?.map((item) => {
+          return (
+            <div
+              key={item.value}
+              className="flex items-center justify-start mb-2 font-semibold text-lg"
+            >
+              <input
+                type="checkbox"
+                id={item.value}
+                name={item.value}
+                checked={checkedUsers[item.value] || false}
+                onChange={() => handleCheckboxChange(item.value)}
+                className="cursor-pointer"
+              />
+              <label htmlFor={item.value} className="ml-2">
+                {item.label}
+              </label>
+            </div>
+          );
+        })
+      )}
       <div className="flex justify-end gap-5">
         <button
           className="bg-gray-300 text-black px-4 py-2 rounded-lg hover:bg-gray-400"

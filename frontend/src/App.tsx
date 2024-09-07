@@ -1,7 +1,6 @@
 import "./App.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import Homepage from "./pages/main";
-// import data from "../src/assets/DemoDtate.json";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setUsers } from "./redux/slice/user";
@@ -27,6 +26,7 @@ function App() {
     dispatch(setLoading(isLoading));
     if (error) dispatch(setError(error));
     else dispatch(setError(""));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, isLoading, error]);
 
   return (

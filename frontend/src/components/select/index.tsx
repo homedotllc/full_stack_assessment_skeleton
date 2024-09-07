@@ -29,7 +29,7 @@ function Select({
       )}
       <select
         id={id}
-        className={`block px-3 py-2 border rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${className}`}
+        className={`block px-3 py-2 border rounded-md cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${className}`}
         onChange={(e) => onSelect(e.target.value)}
         value={value}
       >

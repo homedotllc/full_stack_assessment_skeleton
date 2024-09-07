@@ -12,12 +12,14 @@ interface HeaderPropType {
 function Header({ setSelected, selected }: HeaderPropType) {
   const {
     users: { data: userOptions },
-    app: { isLoading },
+    app: { isLoading, error },
   } = useSelector((state: RootState) => state);
 
   function handleUserSelect(e: string) {
     setSelected(e);
   }
+
+  if (error) return "Something went wrong!!!";
 
   return (
     <header className="flex justify-end">
