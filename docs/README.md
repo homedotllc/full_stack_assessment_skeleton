@@ -260,7 +260,12 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+- Key Problem's Solution
+
+  1. A page with a select button with all usernames as options is created. After selecting a user all home that belongs to that user is fetched and display as a card. On each card all details regarding that house is displayed with a edit user button which opens a Modal where user can be added and removed to that particular house.
+  2. Tailwind css is used for styling of components. Redux Tool kit is used to maintain app lavel state such as isLoading and error. Data is fetched from server using RTK.
+  3. RTK used for caching data, in case of updation of user to home cache is invalidated using invalidateTag.
+  4. `react-loading-skeleton` is used to show skeleton while data is being fetched.
 
 ## 3. Backend API development on Node
 
@@ -326,7 +331,11 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+- Key Problem's Solution
+
+  1. Server is build using NestJS Framework with TypeORM for database handling.
+  2. The main challenge was to make the `/home/update-users` API idempotent while ensuring data consistency across the user and home tables. To update the relationship between users and homes, we first need to add users to each home and vice versa. After that, we remove the users from each home and user. The challenge arises if the system breaks after only adding the data, leaving us unable to determine which data needs to be removed.
+  3. To address this issue, I used transactions. All the queries are performed as a single unit, and the changes are committed to the database only if everything is successful. This ensures consistency and prevents partial updates in case of failure.
 
 ## Submission Guidelines
 

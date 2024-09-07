@@ -1,6 +1,8 @@
 import React from "react";
 import Select from "./select";
 import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import Skeleton from "react-loading-skeleton";
 
 interface HeaderPropType {
   selected: string;
@@ -8,19 +10,32 @@ interface HeaderPropType {
 }
 
 function Header({ setSelected, selected }: HeaderPropType) {
-  const { data: userOptions } = useSelector((state) => state.users);
+  const {
+    users: { data: userOptions },
+    app: { isLoading },
+  } = useSelector((state: RootState) => state);
 
   function handleUserSelect(e: string) {
     setSelected(e);
   }
+
   return (
     <header className="flex justify-end">
-      <Select
-        options={userOptions}
-        onSelect={handleUserSelect}
-        label="Select User"
-        value={selected}
-      />
+      {isLoading ? (
+        <div>
+          <Skeleton
+            className="h-[25px] w-[100px] p-5 rounded-lg shadow-md text-left flex flex-wrap"
+            count={1}
+          />
+        </div>
+      ) : (
+        <Select
+          options={userOptions}
+          onSelect={handleUserSelect}
+          label="Select User"
+          value={selected}
+        />
+      )}
     </header>
   );
 }

@@ -1,24 +1,33 @@
 import "./App.css";
+import "react-loading-skeleton/dist/skeleton.css";
 import Homepage from "./pages/main";
-import data from "../src/assets/DemoDtate.json";
+// import data from "../src/assets/DemoDtate.json";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setUsers } from "./redux/slice/user";
-
-const userOptions = [...new Set(data.map((item) => item.username))].map(
-  (item) => ({
-    value: item,
-    label: item,
-  })
-);
-userOptions.unshift({ label: "None", value: "" });
+import { useGetUsersQuery } from "./redux/slice/api";
+import { setError, setLoading } from "./redux/slice/app";
 
 function App() {
+  const { data: users, isLoading, error } = useGetUsersQuery();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setUsers(userOptions));
-  }, []);
+    if (users)
+      dispatch(
+        setUsers([
+          { label: "None", value: "" },
+          ...users.map((item) => ({
+            label: item.username,
+            value: item.username,
+          })),
+        ])
+      );
+
+    dispatch(setLoading(isLoading));
+    if (error) dispatch(setError(error));
+    else dispatch(setError(""));
+  }, [users, isLoading, error]);
 
   return (
     <>

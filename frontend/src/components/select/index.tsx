@@ -6,7 +6,7 @@ interface SelectProps {
   onSelect: (value: string) => void;
   label?: string;
   id?: string;
-  value: any;
+  value: string;
 }
 
 function Select({

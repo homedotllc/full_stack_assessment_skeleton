@@ -1,22 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 
 interface ModalPropsTypes {
   children: React.ReactElement | string;
+  isOpen: boolean;
+  handleToggleModal: () => void;
 }
 
-function Modal({ children }: ModalPropsTypes) {
-  const [isOpen, setIsOpen] = useState(false);
-  function handleToggleModal(e) {
-    e.stopPropagation();
-    setIsOpen((prev) => !prev);
-  }
+function Modal({ children, isOpen, handleToggleModal }: ModalPropsTypes) {
   return (
     <>
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
         onClick={handleToggleModal}
       >
-        Edit Users
+        Edit User
       </button>
       {isOpen && (
         <div

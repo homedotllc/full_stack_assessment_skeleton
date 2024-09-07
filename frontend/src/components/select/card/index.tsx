@@ -1,17 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import CardFooter from "./Footer";
 import CardHeader from "./Header";
 import Modal from "../../modal";
 import UserModal from "../../UserModal";
+import { Home } from "../../../types";
 
-interface CardPropTypes {
-  baths: number;
-  beds: number;
-  zip: string;
-  state: string;
-  sqft: number;
-  street_address: string;
-  list_price: number;
+interface CardPropTypes extends Home {
+  key: string | number;
 }
 
 function Card({
@@ -23,8 +18,13 @@ function Card({
   state,
   list_price,
 }: CardPropTypes) {
+  const [isOpen, setIsOpen] = useState(false);
+  function handleToggleModal() {
+    setIsOpen((prev) => !prev);
+  }
+
   return (
-    <div className="w-[225px] p-5 bg-white rounded-lg shadow-md text-left">
+    <div className="w-[225px] p-5 bg-white rounded-lg shadow-md text-left flex justify-between flex-col">
       <CardHeader>{street_address}</CardHeader>
 
       <ul className="mb-4">
@@ -52,8 +52,8 @@ function Card({
         </li>
       </ul>
       <CardFooter>
-        <Modal>
-          <UserModal />
+        <Modal {...{ handleToggleModal, isOpen }}>
+          <UserModal {...{ street_address, handleToggleModal }} />
         </Modal>
       </CardFooter>
     </div>

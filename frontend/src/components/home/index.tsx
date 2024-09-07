@@ -1,26 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Card from "../select/card";
-import DB from "../../assets/DemoDtate.json";
+import { useGetHomesByUserQuery } from "../../redux/slice/api";
+import Skeleton from "react-loading-skeleton";
 
 interface HomeProps {
   selected: string;
 }
 
 function Home({ selected }: HomeProps) {
-  const [data, setData] = useState();
+  const {
+    data: homes,
+    isLoading,
+    isError,
+    // error,
+  } = useGetHomesByUserQuery(selected, {
+    skip: !selected,
+  });
 
-  useEffect(() => {
-    if (selected) {
-      setData(DB.filter((item) => item.username == selected));
-    }
-  }, [selected]);
-  if (!data) return;
+  if (isError) return "Something happened...";
 
   return (
-    <div className="flex flex-wrap gap-5">
-      {data.map((item, i) => {
-        return <Card key={i} {...{ ...item }} />;
-      })}
+    <div className="flex flex-wrap gap-5 justify-between">
+      {isLoading ? (
+        <div className="wrapper">
+          <Skeleton
+            count={8}
+            // wrapper={Box}
+            className="h-[288px] w-[225px] p-5 rounded-lg shadow-md text-left flex flex-wrap"
+          />
+        </div>
+      ) : (
+        homes?.map((item) => {
+          return <Card key={item.street_address} {...{ ...item }} />;
+        })
+      )}
     </div>
   );
 }

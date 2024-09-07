@@ -1,8 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import {
+  useGetUserByHomeQuery,
+  useSetUserOfHomeMutation,
+} from "../redux/slice/api";
+import { RootState } from "../redux/store";
 
-function UserModal() {
-  const { data: userOptions } = useSelector((state) => state.users);
+interface UserModalPropsTypes {
+  street_address: string;
+  handleToggleModal: () => void;
+}
+
+function UserModal({ street_address, handleToggleModal }: UserModalPropsTypes) {
+  const { data, isError, isLoading } = useGetUserByHomeQuery(street_address, {
+    skip: !street_address,
+  });
+  const { data: users } = useSelector((state: RootState) => state.users);
+  const [checkedUsers, setCheckedUsers] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+
+  const [updateUsersForHome, { isLoading: isUpdating }] =
+    useSetUserOfHomeMutation();
+
+  useEffect(() => {
+    if (data) {
+      const usernamesOfCurrentHome = data.map((item) => item.username);
+      const initialCheckedState = users.reduce<Record<string, boolean>>(
+        (acc, user) => {
+          acc[user.value] = usernamesOfCurrentHome.includes(user.value);
+          return acc;
+        },
+        {}
+      );
+      setCheckedUsers(initialCheckedState);
+    }
+  }, [data, users]);
+
+  if (isLoading || isUpdating) return "Loading...";
+  if (isError) return "An error occurred";
+  const isAleastCheckedOne = Object.values(checkedUsers).some(Boolean);
+
+  const handleCheckboxChange = (value: string) => {
+    setCheckedUsers((prev) => ({
+      ...prev,
+      [value]: !prev[value],
+    }));
+  };
+
+  const handleUpdateUserForHome = async () => {
+    const usernames = Object.entries(checkedUsers).flatMap(([key, value]) =>
+      value ? key : []
+    );
+    if (!usernames.length) {
+      alert("Please select at least one User!!");
+      return;
+    }
+
+    await updateUsersForHome({ street_address, usernames }).unwrap();
+    handleToggleModal();
+  };
 
   return (
     <div
@@ -10,14 +67,24 @@ function UserModal() {
       onClick={(e) => e.stopPropagation()}
     >
       <h4 className="text-lg font-bold mb-6">
-        Modify Users for: 888888 Pine street
+        Modify Users for: {street_address}
       </h4>
-      {userOptions?.map((item) => {
+      {users?.map((item) => {
         return (
-          <div className="flex items-center justify-start mb-2 font-semibold">
-            <input type="checkbox" id="scales" name="scales" checked />
-            <label htmlFor="scales" className="ml-2">
-              Scales
+          <div
+            key={item.value}
+            className="flex items-center justify-start mb-2 font-semibold text-lg"
+          >
+            <input
+              type="checkbox"
+              id={item.value}
+              name={item.value}
+              checked={checkedUsers[item.value] || false}
+              onChange={() => handleCheckboxChange(item.value)}
+              className="cursor-pointer"
+            />
+            <label htmlFor={item.value} className="ml-2">
+              {item.label}
             </label>
           </div>
         );
@@ -25,13 +92,14 @@ function UserModal() {
       <div className="flex justify-end gap-5">
         <button
           className="bg-gray-300 text-black px-4 py-2 rounded-lg hover:bg-gray-400"
-          // onClick={handleToggleModal}
+          onClick={handleToggleModal}
         >
           Cancel
         </button>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-          // onClick={handleToggleModal}
+          onClick={handleUpdateUserForHome}
+          disabled={!isAleastCheckedOne}
         >
           Save
         </button>
