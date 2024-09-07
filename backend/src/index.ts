@@ -16,8 +16,8 @@ app.use(cors({
 }))
 
 // routes
-app.use('/api/user' , userRoute)    
-app.use('/api/home' , homeRoute)
+app.use('/user' , userRoute)    
+app.use('/home' , homeRoute)
 
 
 AppDataSource.initialize().then(() => {

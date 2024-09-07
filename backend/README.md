@@ -1,5 +1,6 @@
-## Backend Solution Overview
+## Backend Solution
 
+### Overview
 The backend of the assignment is built using Express.js with TypeScript and TypeORM. It includes routes and controllers for managing `User` and `Home` entities in a MySQL database.
 
 ### `backend` Directory Structure
@@ -11,7 +12,6 @@ backend/
 ├── package-lock.json             # Lockfile for the project's dependencies
 ├── package.json                  # Project metadata and dependency definitions
 ├── README.md                     # Project documentation and overview
-├── tree.txt                      # Directory tree structure file (optional)
 ├── tsconfig.json                 # TypeScript configuration file
 └── src/
     ├── data-source.ts            # Database connection and configuration
@@ -30,7 +30,7 @@ backend/
 ```
 
 
-## `homeRoute.ts`
+## `src/routes/homeRoute.ts`
 
 This file sets up routes for handling operations related to homes.
 
@@ -44,7 +44,7 @@ This file sets up routes for handling operations related to homes.
    - Controller: `homeController.updateUsers`
    - Description: Updates the users associated with a specific home based on `homeId`.
 
-## `homeController.ts`
+## `src/controllers/homeController.ts`
 
 This file contains the logic for handling the requests defined in `homeRoute.ts`.
 
@@ -76,7 +76,7 @@ This file contains the logic for handling the requests defined in `homeRoute.ts`
      - Updates the home with the new list of users.
      - Returns success or error messages based on the operation result.
 
-## `userRoute.ts`
+## `src/routes/userRoute.ts`
 
 This file sets up routes for handling operations related to users.
 
@@ -90,7 +90,7 @@ This file sets up routes for handling operations related to users.
    - Controller: `userController.findUsersByHome`
    - Description: Fetches all users associated with a specific home based on `homeId`.
 
-## `userController.ts`
+## `src/controllers/userController.ts`
 
 This file contains the logic for handling the requests defined in `userRoute.ts`.
 

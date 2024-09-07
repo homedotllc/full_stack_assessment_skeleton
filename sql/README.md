@@ -3,7 +3,7 @@
 
 ## Thought Process
 
-The initial problem involves a denormalized `user_home` table, which stores both user-related information (username, email) and home-related attributes (street_address, state, zip, sqft, beds, baths, list_price). This structure leads to data redundancy and inconsistency since each user can be related to multiple homes, and each home can be related to multiple users (a **many-to-many relationship**). My goal is to refactor the database into a normalized structure while maintaining the relationship between users and homes.
+The initial problem involves a denormalized `user_home` table, which stores both user-related information (username, email) and home-related attributes (street_address, state, zip, sqft, beds, baths, list_price). This structure leads to data redundancy and inconsistency since each user can be related to multiple homes, and each home can be related to multiple users (a **many-to-many relationship**). I haved refactors the database into a normalized structure while maintaining the relationship between users and homes.
 
 ### Steps Involved in Refactoring:
 
@@ -24,6 +24,9 @@ The initial problem involves a denormalized `user_home` table, which stores both
      - `home_id` referencing the `home.id` column.
    - The combination of `user_id` and `home_id` acts as a composite primary key for this table, ensuring that each user-home relationship is unique.
    - This structure ensures data normalization and enforces proper referential integrity.
+
+> [!NOTE]
+> The original `user_home` table already exists in the database. I haven't altered the the table in any way to store the `user_home_relation` as altering the given data is a bad practice. The information from this table can be used for creating other tables in future.
   
 #### ERD Diagram
 ![ERD Diagram](../docs/images/ERD_Diagram.png)
@@ -118,4 +121,54 @@ The final SQL script is present in the `sql` folder with the name `99_final_db_d
 1. Create the `user`, `home`, and `user_home_relation` tables.
 2. Insert unique users and homes from the `user_home` table into their respective tables.
 3. Populate the `user_home_relation` table to establish the many-to-many relationships between users and homes.
+
+> [!NOTE]
+> The problem statement clearly states that each user is uniquely identified by its `username` and each home is uniquely identified by its `street_name`.
+
+````
+-- Create the user table with an auto-incrementing primary key
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) NOT NULL
+);
+
+-- Create the home table with an auto-incrementing primary key
+CREATE TABLE home (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    street_address VARCHAR(255) UNIQUE NOT NULL,
+    state VARCHAR(255) NOT NULL,
+    zip VARCHAR(10) NOT NULL,
+    sqft DECIMAL(10, 2) NOT NULL,
+    beds INT NOT NULL,
+    baths INT NOT NULL,
+    list_price DECIMAL(15, 2) NOT NULL
+);
+
+-- Create the user_home relationship table
+CREATE TABLE user_home_relation (
+    user_id INT,
+    home_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (home_id) REFERENCES home(id),
+    PRIMARY KEY (user_id, home_id)
+);
+
+-- Insert unique users into the user table
+INSERT INTO user (username, email)
+SELECT DISTINCT username, email
+FROM home_db.user_home;
+
+-- Insert unique homes into the home table
+INSERT INTO home (street_address, state, zip, sqft, beds, baths, list_price)
+SELECT DISTINCT street_address, state, zip, sqft, beds, baths, list_price
+FROM home_db.user_home;
+
+-- Insert relationships into the user_home table
+INSERT INTO user_home_relation (user_id, home_id)
+SELECT u.id, h.id
+FROM home_db.user_home uh
+JOIN user u ON uh.username = u.username
+JOIN home h ON uh.street_address = h.street_address; 
+````
 

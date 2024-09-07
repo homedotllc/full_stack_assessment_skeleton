@@ -42,14 +42,15 @@
 - clone the fork locally to develop
 
 ### Solution
+- Clone this Repository
 ```
-git clone https://github.com/<username>/full_stack_assessment_skeleton.git
+git clone https://github.com/atharva0300/full_stack_assessment_skeleton
 ```
 - Inside the root directory, start the docker container 
 ```
 docker-compose -f docker-compose.final.yml up --build -d
 ```
-- Spin up the backend server ( Note: No need to add the .env file/ENV variables, the .env >file is already commited )
+- Spin up the backend server ( Note: No need to add the .env file/ENV variables, the .env file is already commited )
 ```
 cd backend
 ```
@@ -165,11 +166,11 @@ docker-compose -f docker-compose.final.yml up --build -d
   - instead you directly write SQL script, that makes all the changes you want to the DB
 
 ### Solution`
-We normalized the `user_home` table, which initially combined user and home data. This denormalized structure was refactored into three separate tables:
+I have normalized the `user_home` table, which initially combined user and home data. This denormalized structure is refactored into three separate tables:
 
-User: Stores user information (`username`, `email`) with a unique `id`.
-Home: Stores home details (`street_address`, `state`, `zip`, `sqft`, `beds`, `baths`, `list_price`) with a unique `id`.
-User-Home Relation: Represents the many-to-many relationship between users and homes by linking `user_id` and `home_id`.
+- **User**: Stores user information (`username`, `email`) with a unique `id`.
+- **Home**: Stores home details (`street_address`, `state`, `zip`, `sqft`, `beds`, `baths`, `list_price`) with a unique `id`.
+- **User-Home** Relation: Represents the many-to-many relationship between users and homes by linking `user_id` and `home_id`.
 
 The detailed explaination of this solution can be found in [DB-Solution-README](../sql/README.md)
 
@@ -262,8 +263,8 @@ The detailed explaination of this solution can be found in [DB-Solution-README](
 > [!IMPORTANT]
 > even if you can do state-management without Redux, you still must use Redux for the solution, (remember the idea is to showcase the skills)
 
-### Solution
-# Frontend Solution Overview
+## Solution
+### Frontend Solution Overview
 
 The frontend uses:
 
@@ -279,15 +280,18 @@ The frontend uses:
   - **`ui`**: Centralizes UI state for easier management.
 
 **Components**: Houses UI components and the main page (`MainPage.jsx`).
+  - **Card**: Component for rendering home details in the form of a card.
+  - **HomeSkeleton**: A custom implementation of loading skeleton.
+  - **Modal**: Component for rendering the dialog box when user clicks `Edit User` button
 
 **Key Functions**:
 - Fetch homes and users efficiently.
 - Update user-home associations with custom logic.
 
 **Checklist**:
-- Homes page, edit user functionality, and data-fetching are implemented and tested.
+- [X] Homes page, edit user functionality, and data-fetching are implemented and tested.
 
-The detailed solution of frontend solution can be found in [Frontend-Solution-README](../frontend/README.md)
+The detailed solution of frontend solution can be found in [ReactSPA-Solution-README](../frontend/README.md)
 
 ## 3. Backend API development on Node
 
@@ -352,8 +356,12 @@ The detailed solution of frontend solution can be found in [Frontend-Solution-RE
 The backend is built with Express.js with Typescript and TypeORM, managing `User` and `Home` entities in MySQL.
 
 - **Routes**:
-  - **Homes**: `/find-by-user` (GET) to fetch homes by `userId`, `/update-users` (PATCH) to update users associated with a `homeId`.
-  - **Users**: `/find-all` (GET) to list all users, `/find-by-home` (GET) to get users by `homeId`.
+  - **Homes**: 
+    - `/find-by-user` (GET) to fetch homes by `userId` 
+    - `/update-users` (PATCH) to update users associated with a `homeId`.
+  - **Users**: 
+    - `/find-all` (GET) to list all users
+    -  `/find-by-home` (GET) to get users by `homeId`.
 
 - **Controllers**:
   - **HomeController**: Handles fetching homes for a user and updating users for a home.
