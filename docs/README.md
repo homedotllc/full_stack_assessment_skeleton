@@ -1,3 +1,6 @@
+# Video Demonstration 
+![Video Demonstration](../assets/screen-capture.gif)
+
 # Introduction - how to read this doc
 
 - This exercise is designed to test basic skills in 3 core areas:
@@ -38,9 +41,44 @@
 - fork this repository, you'll be committing all your changes to the forked repo
 - clone the fork locally to develop
 
-```bash
-git clone https://github.com/<username>/full_stack_assessment_skeleton.git
+# `Setup Solution`
+- Clone this Repository
 ```
+git clone https://github.com/atharva0300/full_stack_assessment_skeleton
+```
+- Inside the root directory, start the docker container 
+```
+docker-compose -f docker-compose.final.yml up --build -d
+```
+- Spin up the backend server ( Note: No need to add the .env file/ENV variables, the .env file is already commited )
+```
+cd backend
+```
+ - Install node_modules for backend
+```
+npm install
+```
+```
+npm start
+```
+- Get back into the root directory
+```
+cd ..
+```
+- Start the frontend
+```
+cd frontend
+```
+```
+npm install
+```
+```
+npm run dev
+```
+- Now your React application must be running on ```http://localhost:5173/``` and backend on ```localhost:3000```
+
+
+
 
 > [!NOTE]
 > throughout the readme, we'll be working from within the root directory (full_stack_assessment_skeleton/) of the repo, unless otherwise stated
@@ -49,7 +87,7 @@ git clone https://github.com/<username>/full_stack_assessment_skeleton.git
 - this db instance has some data that will be needed for the exercise, included in it
 
 ```bash
-docker-compose -f docker-compose.initial.yml up --build -d
+docker-compose -f docker-compose.final.yml up --build -d
 ```
 
 - the containerized db listens on `localhost:3306`
@@ -127,9 +165,16 @@ docker-compose -f docker-compose.initial.yml up --build -d
   - so you must **NOT** use Entity first development, where you write your ORM entities and generate SQL migration scripts
   - instead you directly write SQL script, that makes all the changes you want to the DB
 
-### solution
+# `Solution`
+I have normalized the `user_home` table, which initially combined user and home data. This denormalized structure is refactored into three separate tables:
 
-> explain briefly your solution for this problem here
+- **User**: Stores user information (`username`, `email`) with a unique `id`.
+- **Home**: Stores home details (`street_address`, `state`, `zip`, `sqft`, `beds`, `baths`, `list_price`) with a unique `id`.
+- **User-Home** Relation: Represents the many-to-many relationship between users and homes by linking `user_id` and `home_id`.
+
+The detailed explaination of this solution can be found in [DB-Solution-README](../sql/README.md)
+
+
 
 ## 2. React SPA
 
@@ -218,9 +263,35 @@ docker-compose -f docker-compose.initial.yml up --build -d
 > [!IMPORTANT]
 > even if you can do state-management without Redux, you still must use Redux for the solution, (remember the idea is to showcase the skills)
 
-### solution
+# `Solution`
+### Frontend Solution Overview
 
-> explain briefly your solution for this problem here
+The frontend uses:
+
+- **Vite**: For fast development and optimized production builds.
+- **Tailwind CSS**: For efficient, utility-first styling.
+- **Redux Toolkit**: For state management and data fetching with `createAsyncThunk` for controlled state updates and async operations.
+
+**Structure**:
+- **Global Store**: Manages state from `user`, `home`, and `ui` features.
+- **Features**: 
+  - **`home`**: Handles homes data and async actions.
+  - **`user`**: Manages user data and async actions.
+  - **`ui`**: Centralizes UI state for easier management.
+
+**Components**: Houses UI components and the main page (`MainPage.jsx`).
+  - **Card**: Component for rendering home details in the form of a card.
+  - **HomeSkeleton**: A custom implementation of loading skeleton.
+  - **Modal**: Component for rendering the dialog box when user clicks `Edit User` button
+
+**Key Functions**:
+- Fetch homes and users efficiently.
+- Update user-home associations with custom logic.
+
+**Checklist**:
+:heavy_check_mark: Homes page, edit user functionality, and data-fetching are implemented and tested.
+
+The detailed solution of frontend solution can be found in [ReactSPA-Solution-README](../frontend/README.md)
 
 ## 3. Backend API development on Node
 
@@ -279,9 +350,24 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
     - we do NOT want raw SQL, if none of above works, you can use any ORM you know, but please mention and link to it in the README
 
-### solution
+# `Solution`
+### Backend Overview
 
-> explain briefly your solution for this problem here
+The backend is built with Express.js with Typescript and TypeORM, managing `User` and `Home` entities in MySQL.
+
+- **Routes**:
+  - **Homes**: 
+    - `/find-by-user` (GET) to fetch homes by `userId` 
+    - `/update-users` (PATCH) to update users associated with a `homeId`.
+  - **Users**: 
+    - `/find-all` (GET) to list all users
+    -  `/find-by-home` (GET) to get users by `homeId`.
+
+- **Controllers**:
+  - **HomeController**: Handles fetching homes for a user and updating users for a home.
+  - **UserController**: Manages user listing and retrieval based on home association.
+
+The detailed explaination of this solution can be found in [Backend-Solution-README](../backend/README.md)
 
 ## Submission Guidelines
 
