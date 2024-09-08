@@ -129,7 +129,7 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+I have normalized the `user_home` table into three distinct tables: `user`, `home`, and `user_home_mapping`. This structure avoids unnecessary repetition and keeps everything linked correctly, making it easy to handle complex connections between different sets of data.
 
 ## 2. React SPA
 
@@ -220,7 +220,9 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+> `User Homes Page`: Built a page that shows the homes linked to a chosen user, with a dropdown menu to select the user and cards displaying each home. Made sure the design works well on all devices. 
+> `Edit User Feature`: Designed an Edit User pop-up that lets users update their home associations. Users can select options using checkboxes, and changes are saved to the database. 
+> `Data Handling`: Used RTK Query to manage API requests and keep the app's state up-to-date, including showing loading spinners and managing errors.
 
 ## 3. Backend API development on Node
 
@@ -332,3 +334,40 @@ docker-compose -f docker-compose.initial.yml down
 
 - when you've committed everything needed to your github fork, please share the url with us, so we can review your submission
   
+
+
+
+<!-- my space
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean @default(false)
+  author    User?   @relation(fields: [authorId], references: [id])
+  authorId  Int?
+}
+
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  
+  username  String @unique
+}
+
+modal Home{
+  id              Int     @id @default(autoincrement())
+  street_address  String  @unique
+  state           String
+  zip             Int
+  sqft            Int
+  beds            Int
+  baths           Int
+  list_price      Int
+}
+
+modal UserHomeMapping{
+  user_id   Int @relation(fields: User.id)
+  home_id   Int @relation(fields: Home.id)
+}
+ -->
