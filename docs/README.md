@@ -129,7 +129,14 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-I have normalized the `user_home` table into three distinct tables: `user`, `home`, and `user_home_mapping`. This structure avoids unnecessary repetition and keeps everything linked correctly, making it easy to handle complex connections between different sets of data.
+> explain briefly your solution for this problem here
+
+1.1 the user_home table has been divided into 3 seperate tables-<br>
+      - user table : to store `user` attributes: `username`, `email`<br>
+      - home table : to store `home` attributes: all attributes in `user_home` table except for the    above `user` attributes<br>
+      - user_home_mapping :: to store userId and homeId<br>
+1.2 The sql queries for conversion are in 'sql/99_final_db_dump.sql'<br>
+1.3 The relationship between tables is represented properly using foreign keys
 
 ## 2. React SPA
 
@@ -220,9 +227,18 @@ I have normalized the `user_home` table into three distinct tables: `user`, `hom
 
 ### solution
 
-> `User Homes Page`: Built a page that shows the homes linked to a chosen user, with a dropdown menu to select the user and cards displaying each home. Made sure the design works well on all devices. 
-> `Edit User Feature`: Designed an Edit User pop-up that lets users update their home associations. Users can select options using checkboxes, and changes are saved to the database. 
-> `Data Handling`: Used RTK Query to manage API requests and keep the app's state up-to-date, including showing loading spinners and managing errors.
+> explain briefly your solution for this problem here
+To solve this I have created some components:
+User Selection: A dropdown allows selecting a user, and homes related to that user are fetched and displayed in cards using RTK Query.
+
+Home Cards: Each card shows home details and includes an Edit User button to manage users associated with the home.
+
+Edit User Modal: Clicking Edit User opens a modal with checkboxes for user selection. The modal shows users related to the home and allows editing.
+
+Update Users: Upon saving, an RTK Query mutation updates the users for the home via a PUT request and refreshes the UI.
+
+State & Responsiveness: Redux Toolkit manages state, and Tailwind CSS ensures the layout is responsive and functional.
+
 
 ## 3. Backend API development on Node
 
@@ -284,6 +300,20 @@ I have normalized the `user_home` table into three distinct tables: `user`, `hom
 ### solution
 
 > explain briefly your solution for this problem here
+For the backend I have used NestJS and Prisma
+
+API Endpoints: Created four REST APIs using NestJS to handle user and home interactions.
+
+Prisma Models: Used Prisma ORM to define User, Home, and user_home_mapping tables for relational mapping between users and homes.
+
+/user/find-all: Fetch and return all users from the database using Prisma.user.findMany().
+
+/home/find-by-user: Query homes related to a specific user via the user_home_mapping table.
+
+/user/find-by-home: Fetch users related to a home by querying the user_home_mapping table.
+
+/home/update-users: Use Prisma transaction to delete old user-home mappings, insert new ones, and return the updated user list.
+
 
 ## Submission Guidelines
 
@@ -333,41 +363,3 @@ docker-compose -f docker-compose.initial.yml down
 ### submit the fork url
 
 - when you've committed everything needed to your github fork, please share the url with us, so we can review your submission
-  
-
-
-
-<!-- my space
-
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  Int?
-}
-
-
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  
-  username  String @unique
-}
-
-modal Home{
-  id              Int     @id @default(autoincrement())
-  street_address  String  @unique
-  state           String
-  zip             Int
-  sqft            Int
-  beds            Int
-  baths           Int
-  list_price      Int
-}
-
-modal UserHomeMapping{
-  user_id   Int @relation(fields: User.id)
-  home_id   Int @relation(fields: Home.id)
-}
- -->
