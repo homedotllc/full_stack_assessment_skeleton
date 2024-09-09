@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model home {
+  street_address    String              @unique(map: "street_address") @db.VarChar(255)
+  state             String?             @db.VarChar(50)
+  zip               String?             @db.VarChar(10)
+  sqft              Float?              @db.Float
+  beds              Int?
+  baths             Int?
+  list_price        Float?              @db.Float
+  id                Int                 @id @default(autoincrement())
+  user_home_mapping user_home_mapping[]
+}
+
+model user {
+  username          String              @unique(map: "username") @db.VarChar(100)
+  email             String?             @db.VarChar(100)
+  id                Int                 @id @default(autoincrement())
+  user_home_mapping user_home_mapping[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model user_home {
+  username       String? @db.VarChar(100)
+  email          String? @db.VarChar(100)
+  street_address String? @db.VarChar(255)
+  state          String? @db.VarChar(50)
+  zip            String? @db.VarChar(10)
+  sqft           Float?  @db.Float
+  beds           Int?
+  baths          Int?
+  list_price     Float?  @db.Float
+
+  @@ignore
+}
+
+model user_home_mapping {
+  user_id Int
+  home_id Int
+  user    user @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_home_mapping_ibfk_1")
+  home    home @relation(fields: [home_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_home_mapping_ibfk_2")
+
+  @@id([user_id, home_id])
+  @@index([home_id], map: "home_id")
+}
